@@ -22,7 +22,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 //should be called with the keycode of the default layer
 Key::Key(uint32_t activation) 
 {
-    activations[0][0] = static_cast<uint16_t>(activation & 0x0000FFFF); 
+    activations[0][0] = (activation & 0x0000FFFF); 
     durations[0][0] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
 
     //last method is the "release" method
@@ -32,7 +32,7 @@ Key::Key(uint32_t activation)
 //should be called with 
 void Key::addActivation(const uint8_t layer, const uint8_t method, const uint32_t activation) 
 {
-    auto keycode = static_cast<uint16_t>(activation & 0x0000FFFF);
+    auto keycode = (activation & 0x0000FFFF);
 
     /*
      * if the activation is transparent,
@@ -75,7 +75,7 @@ void Key::clear(const unsigned long currentMillis)
     state.clear(currentMillis);
 }
 
-std::pair<uint16_t, uint8_t> Key::getPair(uint8_t layer)
+std::pair<uint32_t, uint8_t> Key::getPair(uint8_t layer)
 {
     uint8_t method;
 

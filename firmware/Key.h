@@ -25,7 +25,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #ifndef KEY_H
 #define KEY_H
 
-using ActArray = std::array<std::array<uint16_t, 5>, 2>;
+using ActArray = std::array<std::array<uint32_t, 5>, 2>;
 using DurArray = std::array<std::array<uint8_t, 5>, 2>;
 
 class Key {
@@ -35,7 +35,7 @@ class Key {
 
         void addActivation(const uint8_t layer, const uint8_t method, const uint32_t activation);
 
-        std::pair<uint16_t, uint8_t> getPair(uint8_t layer);
+        std::pair<uint32_t, uint8_t> getPair(uint8_t layer);
 
         Key(uint32_t activation);
 
