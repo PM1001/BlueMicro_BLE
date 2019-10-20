@@ -137,14 +137,14 @@ void sendKeyPresses() {
    KeyScanner::getReport();                                            // get state data - Data is in KeyScanner::currentReport  
    if (!(KeyScanner::reportEmpty))  //any key presses anywhere?
    {                                                                              
-        sendKeys(KeyScanner::currentReport);
+        sendKeys();
         isReportedReleased = false;
   //     LOG_LV1("MXSCAN","SEND: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] );        
     }
    else                                                                  //NO key presses anywhere
    {
     if ((!isReportedReleased)){
-      sendRelease(KeyScanner::currentReport);  
+      sendRelease();  
       isReportedReleased = true;                                         // Update flag so that we don't re-issue the message if we don't need to.
    //   LOG_LV1("MXSCAN","RELEASED: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] ); 
     }

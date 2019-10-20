@@ -72,7 +72,7 @@ void setupBluetooth(void)
   #endif
   
 #if BLE_PERIPHERAL == 1
-uint8_t Linkdata[7] = {0,0,0,0,0,0,0};
+uint8_t Linkdata[8] = {0,0,0,0,0,0,0,0};
   // Configure Keyboard Link Service
   KBLinkService.begin();
   
@@ -94,11 +94,11 @@ uint8_t Linkdata[7] = {0,0,0,0,0,0,0};
     
   KBLinkChar_Buffer.setProperties(CHR_PROPS_NOTIFY+ CHR_PROPS_READ);
   KBLinkChar_Buffer.setPermission(SECMODE_OPEN, SECMODE_NO_ACCESS);
-  KBLinkChar_Buffer.setFixedLen(7);
+  KBLinkChar_Buffer.setFixedLen(sizeof(KeyScanner::currentReport));
   KBLinkChar_Buffer.setUserDescriptor("Keyboard HID Buffer");
   KBLinkChar_Buffer.setCccdWriteCallback(cccd_callback,true);     /// 0.10.1 - second parameter is the "use adafruit calback" to call adafruit's method before ours.  Not sure what it does.
   KBLinkChar_Buffer.begin();
-  KBLinkChar_Buffer.write(Linkdata, 7);  // initialize with empty buffer
+  KBLinkChar_Buffer.write(Linkdata, sizeof(KeyScanner::currentReport));  // initialize with empty buffer
 
  #endif
  
@@ -387,39 +387,39 @@ void sendlayer(uint8_t layer)
         #endif 
 }
 /**************************************************************************************************************************/
-void sendKeys(uint8_t currentReport[8])
+void sendKeys()
 {
     #if BLE_HID == 1  
         uint8_t keycode[6];
         uint8_t layer = 0;
         uint8_t mods = 0;
-        mods = KeyScanner::currentReport[0];                                                 // modifiers
-        keycode[0] = KeyScanner::currentReport[1];                                           // Buffer 
-        keycode[1] = KeyScanner::currentReport[2];                                           // Buffer 
-        keycode[2] = KeyScanner::currentReport[3];                                           // Buffer 
-        keycode[3] = KeyScanner::currentReport[4];                                           // Buffer 
-        keycode[4] = KeyScanner::currentReport[5];                                           // Buffer 
-        keycode[5] = KeyScanner::currentReport[6];                                           // Buffer 
-        layer = KeyScanner::currentReport[7];                                                // Layer
+        mods =    static_cast<uint8_t>(KeyScanner::currentReport[0]);                                                 // modifiers
+        keycode[0] = static_cast<uint8_t>(KeyScanner::currentReport[1]);                                           // Buffer 
+        keycode[1] = static_cast<uint8_t>(KeyScanner::currentReport[2]);                                           // Buffer 
+        keycode[2] = static_cast<uint8_t>(KeyScanner::currentReport[3]);                                           // Buffer 
+        keycode[3] = static_cast<uint8_t>(KeyScanner::currentReport[4]);                                           // Buffer 
+        keycode[4] = static_cast<uint8_t>(KeyScanner::currentReport[5]);                                           // Buffer 
+        keycode[5] = static_cast<uint8_t>(KeyScanner::currentReport[6]);                                           // Buffer 
+        layer = static_cast<uint8_t>(KeyScanner::currentReport[7]);                                                // Layer
         blehid.keyboardReport(hid_conn_hdl,mods,  keycode); 
-        LOG_LV2("HID","Sending blehid.keyboardReport " );
+        //LOG_LV2("HID","Sending blehid.keyboardReport " );
     #endif
     #if BLE_PERIPHERAL ==1  
-        KBLinkChar_Buffer.notify(KeyScanner::currentReport,7);
+        KBLinkChar_Buffer.notify(KeyScanner::currentReport,sizeof(KeyScanner::currentReport));
     #endif
     #if BLE_CENTRAL ==1
          ; // Only send layer to slaves - send nothing here
     #endif 
 }
 /**************************************************************************************************************************/
-void sendRelease(uint8_t currentReport[8])
+void sendRelease()
 {
     #if BLE_HID == 1
         blehid.keyRelease(hid_conn_hdl);                                             // HID uses the standard blehid service
         LOG_LV2("HID","Sending blehid.keyRelease " );
     #endif
     #if BLE_PERIPHERAL ==1     
-        KBLinkChar_Buffer.notify(currentReport,7);                       // Peripheral->central uses the subscribe/notify mechanism
+        KBLinkChar_Buffer.notify(KeyScanner::currentReport,sizeof(KeyScanner::currentReport));                       // Peripheral->central uses the subscribe/notify mechanism
     #endif
     #if BLE_CENTRAL ==1
           // Only send layer to slaves
