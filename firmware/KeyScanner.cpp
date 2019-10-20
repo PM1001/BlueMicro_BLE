@@ -79,7 +79,7 @@ void KeyScanner::updateRemoteLayer(uint8_t data)
 /**************************************************************************************************************************/
 // Called by callback function when remote data is received
 /**************************************************************************************************************************/
-void KeyScanner::updateRemoteReport(uint8_t data0, uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6)
+void KeyScanner::updateRemoteReport(uint32_t data0, uint32_t data1, uint32_t data2,uint32_t data3, uint32_t data4, uint32_t data5,uint32_t data6)
 {
     remoteMod=data0;
     remoteReport[0]= data0;
@@ -333,8 +333,8 @@ unsigned long KeyScanner::getLastPressed()
 /**************************************************************************************************************************/
 
 
-uint8_t KeyScanner::currentReport[8] = {0, 0, 0 ,0, 0, 0, 0, 0}; 
-uint8_t KeyScanner::remoteReport[8]  = {0, 0, 0 ,0, 0, 0, 0, 0};
+uint32_t KeyScanner::currentReport[8] = {0, 0, 0 ,0, 0, 0, 0, 0}; 
+uint32_t KeyScanner::remoteReport[8]  = {0, 0, 0 ,0, 0, 0, 0, 0};
 bool    KeyScanner::layerChanged = false;
 bool    KeyScanner::reportEmpty = true;
 uint8_t KeyScanner::localLayer = 0;
@@ -345,9 +345,9 @@ unsigned long KeyScanner::timestamps[MATRIX_ROWS][MATRIX_COLS]  = {0};
 unsigned long KeyScanner::lastPressed = 0;
 uint8_t KeyScanner::bufferposition = 0;
 uint8_t KeyScanner::layerMode = 0;
-std::vector<uint16_t> KeyScanner::activeKeys {};
-std::vector<uint16_t> KeyScanner::macroBuffer {};
-std::vector<uint16_t> KeyScanner::toggleBuffer {};
-std::vector<uint16_t> KeyScanner::leaderBuffer {};
-std::vector<uint16_t> KeyScanner::oneshotBuffer {};
+std::vector<uint32_t> KeyScanner::activeKeys {};
+std::vector<uint32_t> KeyScanner::macroBuffer {};
+std::vector<uint32_t> KeyScanner::toggleBuffer {};
+std::vector<uint32_t> KeyScanner::leaderBuffer {};
+std::vector<uint32_t> KeyScanner::oneshotBuffer {};
 

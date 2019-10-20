@@ -37,7 +37,7 @@ class KeyScanner {
         KeyScanner();
  
         static bool scanMatrix(const int& currentState,unsigned long millis, const int& row, const int& col);
-        static void updateRemoteReport(uint8_t data0 , uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6);
+        static void updateRemoteReport(uint32_t data0 , uint32_t data1, uint32_t data2,uint32_t data3, uint32_t data4, uint32_t data5,uint32_t data6);
         static void updateRemoteLayer(uint8_t data0);
         static bool getReport();
         static unsigned long getLastPressed();
@@ -45,7 +45,7 @@ class KeyScanner {
         static bool reportEmpty;
         static uint8_t localLayer;
         static uint8_t layerMode;
-        static uint8_t currentReport[8];
+        static uint32_t currentReport[8];
 
     private:
         static void resetReport();
@@ -55,7 +55,7 @@ class KeyScanner {
         static void copyRemoteReport();
         static void resetRemoteReport();
         
-        static uint8_t remoteReport[8];
+        static uint32_t remoteReport[8];
         static unsigned long timestamps[MATRIX_ROWS][MATRIX_COLS]; 
         static unsigned long lastPressed;
 
@@ -64,10 +64,10 @@ class KeyScanner {
         static uint8_t remoteMod;
         static uint8_t bufferposition;
 
-        static std::vector<uint16_t> activeKeys; 
-        static std::vector<uint16_t> macroBuffer; 
-        static std::vector<uint16_t> toggleBuffer; 
-        static std::vector<uint16_t> leaderBuffer; 
-        static std::vector<uint16_t> oneshotBuffer; 
+        static std::vector<uint32_t> activeKeys; 
+        static std::vector<uint32_t> macroBuffer; 
+        static std::vector<uint32_t> toggleBuffer; 
+        static std::vector<uint32_t> leaderBuffer; 
+        static std::vector<uint32_t> oneshotBuffer; 
 };
 #endif /* KEYSCANNER_H */

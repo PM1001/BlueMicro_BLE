@@ -22,7 +22,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #ifndef ADVANCED_KEYCODES_H
 #define ADVANCED_KEYCODES_H
 
-#define MOD(M, KC) ((uint16_t) KC | (uint16_t) M)
+#define MOD(M, KC) ((uint32_t) KC | (uint32_t) M)
 
 #define MOD_LCTRL (1 << 8)
 #define MOD_LSHIFT (2 << 8)
