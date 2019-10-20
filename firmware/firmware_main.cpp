@@ -43,6 +43,11 @@ uint8_t monitoring_state = STATE_BOOT_INITIALIZE;
 /**************************************************************************************************************************/
 void setup() {
 
+  #if CFG_DEBUG
+    Serial.begin(115200);
+    while ( !Serial ) delay(10);   // for nrf52840 with native usb
+  #endif
+
   LOG_LV1("BLEMIC","Starting %s" ,DEVICE_NAME);
 
   setupGpio();                                                                // checks that NFC functions on GPIOs are disabled.
@@ -134,21 +139,21 @@ void sendKeyPresses() {
    {                                                                              
         sendKeys(KeyScanner::currentReport);
         isReportedReleased = false;
-        LOG_LV1("MXSCAN","SEND: %i %i %i %i %i %i %i %i %i %i" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] );        
+  //     LOG_LV1("MXSCAN","SEND: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] );        
     }
    else                                                                  //NO key presses anywhere
    {
     if ((!isReportedReleased)){
       sendRelease(KeyScanner::currentReport);  
       isReportedReleased = true;                                         // Update flag so that we don't re-issue the message if we don't need to.
-      LOG_LV1("MXSCAN","RELEASED: %i %i %i %i %i %i %i %i %i %i" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] ); 
+   //   LOG_LV1("MXSCAN","RELEASED: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] ); 
     }
    }
   #if BLE_PERIPHERAL ==1   | BLE_CENTRAL ==1                            /**************************************************/
     if(KeyScanner::layerChanged)                                               //layer comms
     {   
         sendlayer(KeyScanner::localLayer);
-        LOG_LV1("MXSCAN","Layer %i  %i" ,millis(),KeyScanner::localLayer);
+   //     LOG_LV1("MXSCAN","Layer %i  %i" ,millis(),KeyScanner::localLayer);
         KeyScanner::layerChanged = false;                                      // mark layer as "not changed" since last update
     } 
   #endif                                                                /**************************************************/

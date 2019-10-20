@@ -29,10 +29,14 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 #define KC_CAP_D MOD(MOD_LSHIFT, KC_D)
 
+#define ADDLAYER(A, B, C)  if (C != KC_NO) {matrix[row][col].addActivation(A, B, C);}
+
 #define _QWERTY 0
 #define _L1  1
 #define _L2  2
 #define _L3  3
+#define _L4  4
+#define _L5  5
 
 #define _PRESS 0
 #define _MT_TAP 1
