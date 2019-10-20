@@ -380,6 +380,14 @@ enum hid_keyboard_keypad_usage {
 #define LAYER_E      0xFE
 #define LAYER_F      0xFF
 
+#define PAGE_DEFAULT  0x00
+#define PAGE_KEYBOARD 0x07
+#define PAGE_MEDIA    0x0C   // also called consumer
+#define PAGE_UNICODE  0x10
+#define PAGE_BLUEMICRO 0xF0  // for keyboard changing functions
+#define PAGE_MACRO     0xF1  // for calling macros
+
+
 
 
 #endif /* HID_KEYCODES_H */

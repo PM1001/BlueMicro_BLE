@@ -242,14 +242,27 @@ bool KeyScanner::updateLayer()
     localLayer = LAYER_0 - 0xF0;
     for (auto keycode : activeKeys)
     {
-        // the first byte is the actual HID keycode of the key
-        uint8_t keyValue = static_cast<uint8_t>(keycode & 0x00FF);
-
-        if (keyValue >= LAYER_0 && keyValue <= LAYER_F)
-        {
-            // calculate layer offset
-            localLayer = keyValue - 0xF0;
-        }
+        uint8_t page =  static_cast<uint8_t>(keycode >> 24 );
+        switch(page)
+                {
+                    case PAGE_MEDIA:
+                        break;
+                    case PAGE_UNICODE:
+                        break;
+                    case PAGE_BLUEMICRO:
+                        break;
+                    case PAGE_MACRO:
+                        break;
+                    default: // applies to PAGE_DEFAULT and PAGE_KEYBOARD
+                            // the first byte is the actual HID keycode of the key
+                            uint8_t keyValue = static_cast<uint8_t>(keycode & 0x00FF);
+                            if (keyValue >= LAYER_0 && keyValue <= LAYER_F)
+                            {
+                                // calculate layer offset
+                                localLayer = keyValue - 0xF0;
+                            }
+                        break;
+                }       
     }
 
     layerChanged = (prevlayer != localLayer);
@@ -266,26 +279,39 @@ bool KeyScanner::updateModifiers()
 
     for (auto keycode : activeKeys)
     {
+
+        uint8_t page =  static_cast<uint8_t>(keycode >> 24 );
+
         //seperate the keycode into the hid keycode and the additional modifiers
         auto extraModifiers = static_cast<uint8_t>((keycode & 0xFF00) >> 8);
         auto hidKeycode = static_cast<uint8_t>(keycode & 0x00FF);
-
-        //check if the hid keycode contains a modifier
-        switch (hidKeycode) { 
-            case KC_LCTRL:  currentMod |= 1;   changed = true; break;
-            case KC_LSHIFT: currentMod |= 2;   changed = true; break;
-            case KC_LALT:   currentMod |= 4;   changed = true; break;
-            case KC_LGUI:   currentMod |= 8;   changed = true; break;
-            case KC_RCTRL:  currentMod |= 16;  changed = true; break;
-            case KC_RSHIFT: currentMod |= 32;  changed = true; break;
-            case KC_RALT:   currentMod |= 64;  changed = true; break;
-            case KC_RGUI:   currentMod |= 128; changed = true; break;
-        }
-
-        //add all of the extra modifiers into the curren modifier 
-        currentMod |= extraModifiers;
+        switch(page)
+        {
+            case PAGE_MEDIA:
+                break;
+            case PAGE_UNICODE:
+                break;
+            case PAGE_BLUEMICRO:
+                break;
+            case PAGE_MACRO:
+                break;
+            default: // applies to PAGE_DEFAULT and PAGE_KEYBOARD
+                    //check if the hid keycode contains a modifier
+                switch (hidKeycode) { 
+                    case KC_LCTRL:  currentMod |= 1;   changed = true; break;
+                    case KC_LSHIFT: currentMod |= 2;   changed = true; break;
+                    case KC_LALT:   currentMod |= 4;   changed = true; break;
+                    case KC_LGUI:   currentMod |= 8;   changed = true; break;
+                    case KC_RCTRL:  currentMod |= 16;  changed = true; break;
+                    case KC_RSHIFT: currentMod |= 32;  changed = true; break;
+                    case KC_RALT:   currentMod |= 64;  changed = true; break;
+                    case KC_RGUI:   currentMod |= 128; changed = true; break;
+                }
+                //add all of the extra modifiers into the curren modifier 
+                 currentMod |= extraModifiers;
+                break;
+        }       
     }
-
     return changed;
 }
 
@@ -301,14 +327,30 @@ bool KeyScanner::getReport()
 
     for (auto keycode : activeKeys) 
     {
-        auto hidKeycode = static_cast<uint8_t>(keycode & 0x00FF);
+        uint8_t page =  static_cast<uint8_t>(keycode >> 24 );
+        auto hidKeycodedefault = static_cast<uint8_t>(keycode & 0x00FF);
 
-        if (hidKeycode >= KC_A && hidKeycode <= KC_EXSEL)
+        switch(page)
         {
-            currentReport[bufferposition] = hidKeycode;
-            ++bufferposition;
-        }
+            case PAGE_MEDIA:
+                    currentReport[bufferposition] = keycode;
+                    ++bufferposition;
+                break;
+            case PAGE_UNICODE:
+                break;
+            case PAGE_BLUEMICRO:
+                break;
+            case PAGE_MACRO:
+                break;
 
+            default: // applies to PAGE_DEFAULT and PAGE_KEYBOARD
+                    if (hidKeycodedefault >= KC_A && hidKeycodedefault <= KC_EXSEL)
+                    {
+                        currentReport[bufferposition] = hidKeycodedefault;
+                        ++bufferposition;
+                    }
+                break;
+        }
         if (bufferposition == 7)
         {
             bufferposition = 1;

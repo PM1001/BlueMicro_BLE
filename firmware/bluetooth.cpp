@@ -210,6 +210,7 @@ void notify_callback(BLEClientCharacteristic* chr, uint8_t* data, uint16_t len)
 
     if (chr->uuid == KBLinkClientChar_Buffer.uuid){
       LOG_LV1("CB NOT","notify_callback: Buffer Data");
+      //TODO: need to switch to 32 bits...  Right now it would break the data passing from one board to the other...
           KeyScanner::updateRemoteReport(data[0],data[1],data[2], data[3],data[4], data[5], data[6]);
       }
       
@@ -391,7 +392,7 @@ void sendKeys()
 {
     #if BLE_HID == 1  
         uint8_t keycode[6];
-        uint8_t layer = 0;
+     //   uint8_t layer = 0;  Not used here
         uint8_t mods = 0;
         mods =    static_cast<uint8_t>(KeyScanner::currentReport[0]);                                                 // modifiers
         keycode[0] = static_cast<uint8_t>(KeyScanner::currentReport[1]);                                           // Buffer 
@@ -400,7 +401,7 @@ void sendKeys()
         keycode[3] = static_cast<uint8_t>(KeyScanner::currentReport[4]);                                           // Buffer 
         keycode[4] = static_cast<uint8_t>(KeyScanner::currentReport[5]);                                           // Buffer 
         keycode[5] = static_cast<uint8_t>(KeyScanner::currentReport[6]);                                           // Buffer 
-        layer = static_cast<uint8_t>(KeyScanner::currentReport[7]);                                                // Layer
+       // layer = static_cast<uint8_t>(KeyScanner::currentReport[7]);                                                // Layer Not used here
         blehid.keyboardReport(hid_conn_hdl,mods,  keycode); 
         //LOG_LV2("HID","Sending blehid.keyboardReport " );
     #endif
