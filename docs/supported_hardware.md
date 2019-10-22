@@ -69,7 +69,12 @@ One such example is the [Blue Ortho](https://imgur.com/a/p3ZXnPM#wDFujG6).
 
 ### NRF52840
 
-This is a relatively new chip that supports on-chip USB.  There is more Flash (1Mb), more RAM (256kb), more GPIOs (48 instead of 32), can run with 5V, and also has a USB 2.0 controller.  It's not clear if wired HID functionality will be available.  There are very few modules currently available.  Adafruit is currently working on developping the NRF52840.  Until they release their hardware and updated NRF52 libraries to support this chip, we will not be able to use the BlueMicro firmware with the NRF52840.
+This is a relatively new chip that supports on-chip USB.  There is more Flash (1Mb), more RAM (256kb), more GPIOs (48 instead of 32), can run with 5V, and also has a USB 2.0 controller.  It's not clear if wired HID functionality will be available.  There are very few modules currently available.  Adafruit has released the NRF52840 feather.  The library supports this chip.  We now need to implement all the functionality for supporting both USB abd BLE HID.
+
+
+### NRF52833
+
+This chip is the latest in the nrf52 chip announced in october 2019 by nordic semiconductors. It does have USB support. There are currently no modules available for this chip.
 
 
 ### NRF52810
