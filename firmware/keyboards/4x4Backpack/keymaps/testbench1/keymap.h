@@ -17,43 +17,28 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef BLUETOOTH_H
-#define BLUETOOTH_H
-#include <bluefruit.h>
-#include "firmware_config.h"
-#include "bluetooth_config.h"
-#undef min
-#undef max
+#include <stdint.h>
+#include "hid_keycodes.h"
+#include "keyboard_config.h"
+#include "advanced_keycodes.h"
+#include "Key.h"
+#include <array>
 
-#include "KeyScanner.h"
-#include "battery.h"
+#ifndef KEYMAP_H
+#define KEYMAP_H
 
+#define KC_CAP_D MOD(MOD_LSHIFT, KC_D)
+#define NUM_LAYERS 2
 
+#define _QWERTY 0
+#define _L1  1
+#define _PRESS 0
+#define _MT_TAP 1
+#define _MT_HOLD 2
+#define _DT_TAP 3
+#define _DT_DOUBLETAP 4
 
-void setupBluetooth(void);
-void startAdv(void);
-void set_keyboard_led(uint16_t conn_handle, uint8_t led_bitmap);
+void setupKeymap();
+extern std::array<std::array<Key, MATRIX_COLS>, MATRIX_ROWS> matrix;
 
-void sendKeys();
-void sendRelease();
-
-#if BLE_PERIPHERAL ==1   | BLE_CENTRAL ==1 
-void sendlayer(uint8_t layer);
-#endif
-
-#if BLE_PERIPHERAL == 1
-    void cccd_callback(uint16_t conn_hdl,BLECharacteristic* chr, uint16_t cccd_value)  ;
-    void layer_request_callback (uint16_t conn_hdl,BLECharacteristic* chr, uint8_t* data, uint16_t len);
-#endif
-
-
-#if BLE_CENTRAL == 1
-    void notify_callback(BLEClientCharacteristic* chr, uint8_t* data, uint16_t len);
-    void scan_callback(ble_gap_evt_adv_report_t* report);
-    void prph_connect_callback(uint16_t conn_handle);
-    void prph_disconnect_callback(uint16_t conn_handle, uint8_t reason);
-    void cent_connect_callback(uint16_t conn_handle);
-    void cent_disconnect_callback(uint16_t conn_handle, uint8_t reason);
-#endif
-extern uint32_t run_command_page_bluemicro;
-#endif /* BLUETOOTH_H */
+#endif /* KEYMAP_H */

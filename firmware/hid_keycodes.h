@@ -27,6 +27,8 @@ https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf
 #ifndef HID_KEYCODES_H
 #define HID_KEYCODES_H
 
+#include "tinyusb/src/class/hid/hid.h"
+
 /*
  * Short names for ease of definition of keymap
  */
@@ -380,14 +382,149 @@ enum hid_keyboard_keypad_usage {
 #define LAYER_E      0xFE
 #define LAYER_F      0xFF
 
-#define PAGE_DEFAULT  0x00
-#define PAGE_KEYBOARD 0x07
-#define PAGE_MEDIA    0x0C   // also called consumer
-#define PAGE_UNICODE  0x10
+#define PAGE_DEFAULT   0x00
+#define PAGE_KEYBOARD  HID_USAGE_PAGE_KEYBOARD  
+#define PAGE_MEDIA     HID_USAGE_PAGE_CONSUMER  
+#define PAGE_UNICODE   HID_USAGE_PAGE_UNICODE 
 #define PAGE_BLUEMICRO 0xF0  // for keyboard changing functions
 #define PAGE_MACRO     0xF1  // for calling macros
 
+#define KC_SYSTEM_POWER     ((uint32_t) HID_USAGE_CONSUMER_POWER             | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_SYSTEM_SLEEP	    ((uint32_t) HID_USAGE_CONSUMER_SLEEP             | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_AUDIO_MUTE	    ((uint32_t) HID_USAGE_CONSUMER_MUTE              | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_AUDIO_VOL_UP     ((uint32_t) HID_USAGE_CONSUMER_VOLUME_INCREMENT  | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_AUDIO_VOL_DOWN   ((uint32_t) HID_USAGE_CONSUMER_VOLUME_DECREMENT  | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_MEDIA_NEXT_TRACK ((uint32_t) HID_USAGE_CONSUMER_SCAN_NEXT         | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_MEDIA_PREV_TRACK	((uint32_t) HID_USAGE_CONSUMER_SCAN_PREVIOUS     | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_MEDIA_STOP	    ((uint32_t) HID_USAGE_CONSUMER_STOP              | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_MEDIA_PLAY_PAUSE	((uint32_t) HID_USAGE_CONSUMER_PLAY_PAUSE        | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_MSEL ((uint32_t) HID_USAGE_CONSUMER_AL_CONSUMER_CONTROL_CONFIGURATION | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW             ((uint32_t) HID_USAGE_CONSUMER_AL_EMAIL_READER   | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_CALCULATOR       ((uint32_t) HID_USAGE_CONSUMER_AL_CALCULATOR     | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_MYCM ((uint32_t) HID_USAGE_CONSUMER_AL_LOCAL_BROWSER  | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW_SEARCH	    ((uint32_t) HID_USAGE_CONSUMER_AC_SEARCH         | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW_HOME	        ((uint32_t) HID_USAGE_CONSUMER_AC_HOME           | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW_BACK	        ((uint32_t) HID_USAGE_CONSUMER_AC_BACK           | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW_FORWARD	    ((uint32_t) HID_USAGE_CONSUMER_AC_FORWARD        | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW_STOP	        ((uint32_t) HID_USAGE_CONSUMER_AC_STOP           | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW_REFRESH	    ((uint32_t) HID_USAGE_CONSUMER_AC_REFRESH        | (uint32_t) (PAGE_MEDIA << 24))
+#define KC_WWW_FAVORITES    ((uint32_t) HID_USAGE_CONSUMER_AC_BOOKMARKS      | (uint32_t) (PAGE_MEDIA << 24))
 
+#define KC_PWR 	            KC_SYSTEM_POWER
+#define KC_SLEP             KC_SYSTEM_SLEEP
+#define KC_MUTE             KC_AUDIO_MUTE
+#define KC_VOLU             KC_AUDIO_VOL_UP
+#define KC_VOLD             KC_AUDIO_VOL_DOWN
+#define KC_MNXT             KC_MEDIA_NEXT_TRACK 
+#define KC_MPRV             KC_MEDIA_PREV_TRACK
+#define KC_MSTP             KC_MEDIA_STOP
+#define KC_MPLY             KC_MEDIA_PLAY_PAUSE
+#define KC_CALC             KC_CALCULATOR
+#define KC_WSCH             KC_WWW_SEARCH
+#define KC_WHOM             KC_WWW_HOME
+#define KC_WBAK             KC_WWW_BACK
+#define KC_WFWD             KC_WWW_FORWARD
+#define KC_WSTP             KC_WWW_STOP
+#define KC_WREF             KC_WWW_REFRESH
+#define KC_WFAV             KC_WWW_FAVORITES
+
+/*
+ // Power Control
+  HID_USAGE_CONSUMER_POWER                             = 0x0030,
+  HID_USAGE_CONSUMER_RESET                             = 0x0031,
+  HID_USAGE_CONSUMER_SLEEP                             = 0x0032,
+
+  // Screen Brightness
+  HID_USAGE_CONSUMER_BRIGHTNESS_INCREMENT              = 0x006F,
+  HID_USAGE_CONSUMER_BRIGHTNESS_DECREMENT              = 0x0070,
+  // Media Control
+  HID_USAGE_CONSUMER_PLAY_PAUSE                        = 0x00CD,
+  HID_USAGE_CONSUMER_SCAN_NEXT                         = 0x00B5,
+  HID_USAGE_CONSUMER_SCAN_PREVIOUS                     = 0x00B6,
+  HID_USAGE_CONSUMER_STOP                              = 0x00B7,
+  HID_USAGE_CONSUMER_VOLUME                            = 0x00E0,
+  HID_USAGE_CONSUMER_MUTE                              = 0x00E2,
+  HID_USAGE_CONSUMER_BASS                              = 0x00E3,
+  HID_USAGE_CONSUMER_TREBLE                            = 0x00E4,
+  HID_USAGE_CONSUMER_BASS_BOOST                        = 0x00E5,
+  HID_USAGE_CONSUMER_VOLUME_INCREMENT                  = 0x00E9,
+  HID_USAGE_CONSUMER_VOLUME_DECREMENT                  = 0x00EA,
+  HID_USAGE_CONSUMER_BASS_INCREMENT                    = 0x0152,
+  HID_USAGE_CONSUMER_BASS_DECREMENT                    = 0x0153,
+  HID_USAGE_CONSUMER_TREBLE_INCREMENT                  = 0x0154,
+  HID_USAGE_CONSUMER_TREBLE_DECREMENT                  = 0x0155,
+
+  // Application Launcher
+  HID_USAGE_CONSUMER_AL_CONSUMER_CONTROL_CONFIGURATION = 0x0183,
+  HID_USAGE_CONSUMER_AL_EMAIL_READER                   = 0x018A,
+  HID_USAGE_CONSUMER_AL_CALCULATOR                     = 0x0192,
+  HID_USAGE_CONSUMER_AL_LOCAL_BROWSER                  = 0x0194,
+
+  // Browser/Explorer Specific
+  HID_USAGE_CONSUMER_AC_SEARCH                         = 0x0221,
+  HID_USAGE_CONSUMER_AC_HOME                           = 0x0223,
+  HID_USAGE_CONSUMER_AC_BACK                           = 0x0224,
+  HID_USAGE_CONSUMER_AC_FORWARD                        = 0x0225,
+  HID_USAGE_CONSUMER_AC_STOP                           = 0x0226,
+  HID_USAGE_CONSUMER_AC_REFRESH                        = 0x0227,
+  HID_USAGE_CONSUMER_AC_BOOKMARKS                      = 0x022A,
+
+  // Mouse Horizontal scroll
+  HID_USAGE_CONSUMER_AC_PAN                            = 0x0238,
+*/
+
+#define RESET               ((uint32_t) 0x0100     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define DEBUG               ((uint32_t) 0x0101     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define EEPROM_RESET        ((uint32_t) 0x0102     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define EEP_RST             EEPROM_RESET
+#define DFU                 ((uint32_t) 0x0103     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define SERIAL_DFU          ((uint32_t) 0x0104     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define CLEAR_BONDS         ((uint32_t) 0x0105     | (uint32_t) (PAGE_BLUEMICRO << 24))
+
+#define BL_TOGG             ((uint32_t) 0x1000     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_STEP             ((uint32_t) 0x1001     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_ON               ((uint32_t) 0x1002     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_OFF              ((uint32_t) 0x1003     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_INC              ((uint32_t) 0x1004     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_DEC              ((uint32_t) 0x1005     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_BRTG             ((uint32_t) 0x1006     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_REACT             ((uint32_t) 0x1007     | (uint32_t) (PAGE_BLUEMICRO << 24))
+
+#define OUT_AUTO            ((uint32_t) 0x1010     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define OUT_USB             ((uint32_t) 0x1010     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define OUT_BT              ((uint32_t) 0x1010     | (uint32_t) (PAGE_BLUEMICRO << 24))
+
+#define RGB_TOG             ((uint32_t) 0x1020     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_MODE_FORWARD    ((uint32_t) 0x1021     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_MOD             RGB_MODE_FORWARD
+#define RGB_MODE_REVERSE	((uint32_t) 0x1022     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_RMOD            RGB_MODE_REVERSE
+#define RGB_HUI             ((uint32_t) 0x1023     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_HUD             ((uint32_t) 0x1024     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_SAI             ((uint32_t) 0x1025     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_SAD             ((uint32_t) 0x1026     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_VAI             ((uint32_t) 0x1027     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_VAD             ((uint32_t) 0x1028     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_MODE_PLAIN      ((uint32_t) 0x1029     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_P             RGB_MODE_PLAIN
+#define RGB_MODE_BREATHE    ((uint32_t) 0x102A     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_B             RGB_MODE_BREATHE
+#define RGB_MODE_RAINBOW    ((uint32_t) 0x102B     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_R             RGB_MODE_RAINBOW 
+#define RGB_MODE_SWIRL      ((uint32_t) 0x102C     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_SW            RGB_MODE_SWIRL
+#define RGB_MODE_SNAKE      ((uint32_t) 0x102D     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_SN            RGB_MODE_SNAKE
+#define RGB_MODE_KNIGHT     ((uint32_t) 0x102E     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_K             RGB_MODE_KNIGHT
+#define RGB_MODE_XMAS       ((uint32_t) 0x102F     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_X             RGB_MODE_XMAS
+#define RGB_MODE_GRADIENT   ((uint32_t) 0x1030     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_G             RGB_MODE_GRADIENT
+#define RGB_MODE_RGBTEST    ((uint32_t) 0x1031     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_M_T             RGB_MODE_RGBTEST
+#define RGB_SPI             ((uint32_t) 0x1032     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_SPI             ((uint32_t) 0x1033     | (uint32_t) (PAGE_BLUEMICRO << 24))
 
 
 #endif /* HID_KEYCODES_H */

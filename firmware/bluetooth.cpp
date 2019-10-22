@@ -391,19 +391,44 @@ void sendlayer(uint8_t layer)
 void sendKeys()
 {
     #if BLE_HID == 1  
-        uint8_t keycode[6];
-     //   uint8_t layer = 0;  Not used here
+        uint8_t keycode[6] = {0,0,0,0,0,0};
+        uint16_t usagecode = 0;
+
+        uint8_t index = 0;
         uint8_t mods = 0;
         mods =    static_cast<uint8_t>(KeyScanner::currentReport[0]);                                                 // modifiers
-        keycode[0] = static_cast<uint8_t>(KeyScanner::currentReport[1]);                                           // Buffer 
-        keycode[1] = static_cast<uint8_t>(KeyScanner::currentReport[2]);                                           // Buffer 
-        keycode[2] = static_cast<uint8_t>(KeyScanner::currentReport[3]);                                           // Buffer 
-        keycode[3] = static_cast<uint8_t>(KeyScanner::currentReport[4]);                                           // Buffer 
-        keycode[4] = static_cast<uint8_t>(KeyScanner::currentReport[5]);                                           // Buffer 
-        keycode[5] = static_cast<uint8_t>(KeyScanner::currentReport[6]);                                           // Buffer 
-       // layer = static_cast<uint8_t>(KeyScanner::currentReport[7]);                                                // Layer Not used here
+        for (int i = 1; i <  7; i++) {
+            uint32_t thiskeycode = KeyScanner::currentReport[i];
+            uint8_t page =  static_cast<uint8_t>(thiskeycode >> 24 );
+
+            switch(page)
+              {
+                  case PAGE_MEDIA:
+                      usagecode = static_cast<uint16_t>(thiskeycode);
+                      blehid.consumerKeyPress(hid_conn_hdl, usagecode);
+                      break;
+                  case PAGE_UNICODE:
+                      break;
+                  case PAGE_BLUEMICRO:
+                     // run_command_page_bluemicro = thiskeycode;
+                      break;
+                  case PAGE_MACRO:
+                      break;
+                  default: // applies to PAGE_DEFAULT and PAGE_KEYBOARD
+                      keycode[index] = static_cast<uint8_t>(thiskeycode);                                           // Buffer 
+                      index++;
+                      break;
+              }
+          }
+        // layer = static_cast<uint8_t>(KeyScanner::currentReport[7]);                                                // Layer Not used here
         blehid.keyboardReport(hid_conn_hdl,mods,  keycode); 
+        
         //LOG_LV2("HID","Sending blehid.keyboardReport " );
+
+        /*
+        bool consumerKeyPress(uint16_t usage_code);
+        bool consumerKeyRelease(void);
+        */
     #endif
     #if BLE_PERIPHERAL ==1  
         KBLinkChar_Buffer.notify(KeyScanner::currentReport,sizeof(KeyScanner::currentReport));
@@ -417,6 +442,7 @@ void sendRelease()
 {
     #if BLE_HID == 1
         blehid.keyRelease(hid_conn_hdl);                                             // HID uses the standard blehid service
+        blehid.consumerKeyRelease(hid_conn_hdl);
         LOG_LV2("HID","Sending blehid.keyRelease " );
     #endif
     #if BLE_PERIPHERAL ==1     

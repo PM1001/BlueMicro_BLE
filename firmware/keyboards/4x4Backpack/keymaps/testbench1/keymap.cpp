@@ -16,40 +16,34 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 */
 #include "keymap.h"
- 
 
+// Layer access from main
+// OS(KC_LSFT) on main layer
+// TG(KC_LSFT) on main layer
+// KC_CALC (media key) on main layer
+
+// KC_TRNS on layer
+// KC_TRNS on layer to main keys
+// KC_WWW on layer (media key)
 
 
 std::array<std::array<Key, MATRIX_COLS>, MATRIX_ROWS> matrix =
-    {KEYMAP(
-        KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
-        KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_RSFT,
-        KC_Z,    KC_X,    KC_C,    KC_V,    KC_BSPC, KC_SPC,  KC_B,    KC_N,    KC_M,    KC_ENT
-    )};
+    {{
+        {KC_7,    KC_CALC,        KC_9,         KC_KP_SLASH,},
+        {KC_4,    KC_5,        KC_6,         KC_KP_ASTERISK,},
+        {KC_1,    KC_2,        KC_3,         KC_KP_MINUS,},
+        {LAYER_1, OS(KC_LSFT), TG(KC_LSFT),  KC_KP_PLUS}
+    }};
 
  
 void setupKeymap() {
 
-
     uint32_t layer1[MATRIX_ROWS][MATRIX_COLS] =
         KEYMAP(
-    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
-    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_RSFT,
-    KC_Z,    KC_X,    KC_C,    KC_V,    KC_BSPC, KC_SPC,  KC_B,    KC_N,    KC_M,    KC_ENT );
-
-
-    uint32_t layer2[MATRIX_ROWS][MATRIX_COLS] =
-        KEYMAP(
-    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
-    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_RSFT,
-    KC_Z,    KC_X,    KC_C,    KC_V,    KC_BSPC, KC_SPC,  KC_B,    KC_N,    KC_M,    KC_ENT );
-
-
-    uint32_t layer3[MATRIX_ROWS][MATRIX_COLS] =
-        KEYMAP(
-    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
-    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_RSFT,
-    KC_Z,    KC_X,    KC_C,    KC_V,    KC_BSPC, KC_SPC,  KC_B,    KC_N,    KC_M,    KC_ENT );
+    KC_TRNS,    KC_WWW,        KC_PGUP,        KC_ESCAPE,    
+    KC_TRNS,    KC_NO,        KC_RIGHT,       KC_DELETE,  
+    KC_TRNS,    KC_DOWN,      KC_PGDN,        KC_KP_ENTER,    
+    KC_TRNS,    KC_KP_PLUS,   KC_KP_PLUS,     KC_KP_ENTER);
 
     /*
      * add the other layers
@@ -59,8 +53,6 @@ void setupKeymap() {
         for (int col = 0; col < MATRIX_COLS; ++col)
         {
             matrix[row][col].addActivation(_L1, _PRESS, layer1[row][col]);
-            matrix[row][col].addActivation(_L2, _PRESS, layer2[row][col]);
-            matrix[row][col].addActivation(_L3, _PRESS, layer3[row][col]);
         }
     }
 

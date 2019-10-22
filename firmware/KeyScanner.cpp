@@ -279,9 +279,7 @@ bool KeyScanner::updateModifiers()
 
     for (auto keycode : activeKeys)
     {
-
         uint8_t page =  static_cast<uint8_t>(keycode >> 24 );
-
         //seperate the keycode into the hid keycode and the additional modifiers
         auto extraModifiers = static_cast<uint8_t>((keycode & 0xFF00) >> 8);
         auto hidKeycode = static_cast<uint8_t>(keycode & 0x00FF);
