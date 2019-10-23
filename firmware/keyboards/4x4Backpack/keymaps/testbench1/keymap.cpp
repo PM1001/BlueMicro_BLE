@@ -29,10 +29,10 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 std::array<std::array<Key, MATRIX_COLS>, MATRIX_ROWS> matrix =
     {{
-        {KC_7,    KC_CALC,        KC_9,         KC_KP_SLASH,},
-        {KC_4,    KC_5,        KC_6,         KC_KP_ASTERISK,},
-        {KC_1,    KC_2,        KC_3,         KC_KP_MINUS,},
-        {LAYER_1, OS(KC_LSFT), TG(KC_LSFT),  KC_KP_PLUS}
+        {KC_1,     OS(KC_1),     TG(KC_1),     KC_NO,},
+        {KC_CALC,  OS(KC_CALC),  TG(KC_CALC),  KC_NO,},
+        {KC_LSFT,  OS(KC_LSFT) , TG(KC_LSFT),  KC_NO,},
+        {LAYER_1,  OS(LAYER_1) , TG(LAYER_1),  KC_NO}
     }};
 
  
@@ -40,10 +40,10 @@ void setupKeymap() {
 
     uint32_t layer1[MATRIX_ROWS][MATRIX_COLS] =
         KEYMAP(
-    KC_TRNS,    KC_WWW,        KC_PGUP,        KC_ESCAPE,    
-    KC_TRNS,    KC_NO,        KC_RIGHT,       KC_DELETE,  
-    KC_TRNS,    KC_DOWN,      KC_PGDN,        KC_KP_ENTER,    
-    KC_TRNS,    KC_KP_PLUS,   KC_KP_PLUS,     KC_KP_ENTER);
+        KC_TRNS,    OS(KC_A),     TG(KC_A),       KC_A,    
+        KC_TRNS,    OS(KC_WWW),   TG(KC_WWW),     KC_WWW,  
+        KC_TRNS,    OS(KC_LCTL),  TG(KC_LCTL),    KC_LCTL,    
+        KC_TRNS,    OS(LAYER_1),  TG(LAYER_1),    LAYER_1);
 
     /*
      * add the other layers
