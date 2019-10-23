@@ -43,6 +43,9 @@ We need to cover a number of permutations for all the options in the following c
 
 ## Details of all test cases to cover
 
+** NOTE: this table represents the results of tests performed in this branch.  Lots of changed occurred: mainly the switch from 8/16 bit keycodes to 32 bits activation codes.
+This change enables the addition of media keys and other code pages to map other functions. It does not represent the state of the firmware in the master branch! **
+
 | Hardware Config        | Layer | Activation Methods | Key       | Implemented             | Results       |
 | ---------------------- | ----- | ------------------ | --------- | ----------------------- | ------------- |
 | Master                 | main  | PRESS              | Keycode   |  testbench1 - KC_1      | OK            |
