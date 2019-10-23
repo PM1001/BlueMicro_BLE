@@ -46,7 +46,7 @@ We need to cover a number of permutations for all the options in the following c
 | Hardware Config        | Layer | Activation Methods | Key       | Implemented             | Results       |
 | ---------------------- | ----- | ------------------ | --------- | ----------------------- | ------------- |
 | Master                 | main  | PRESS              | Keycode   |  testbench1 - KC_1      | OK            |
-|                        | main  | PRESS + OS         | Keycode   |  testbench1 - OS(KC_1)  | BUG: OS active?  |
+|                        | main  | PRESS + OS         | Keycode   |  testbench1 - OS(KC_1)  | BUG: OS active?|
 |                        | main  | PRESS + TG         | Keycode   |  testbench1 - TG(KC_1)  | BUG: TG active |
 |                        | main  | MT\_TAP            | Keycode   |             |  |
 |                        | main  | MT\_HOLD           | Keycode   |             |  |
@@ -88,26 +88,30 @@ We need to cover a number of permutations for all the options in the following c
 |                        | main  | MT\_HOLD           | Config    |  N/A        |  |
 |                        | main  | DT\_TAP            | Config    |  N/A        |  |
 |                        | main  | DT\_DOUBLTAP       | Config    |  N/A        |  |
-| Master                 | layer | PRESS              | Keycode   |  testbench1 - KC_A     |  |
+| Master                 | layer | PRESS              | Keycode   |  testbench1 - KC_A     | OK |
+|                        | layer | PRESS + KC_TRNS    | Keycode   |  testbench1 - KC_1     | OK |
 |                        | layer | PRESS + OS         | Keycode   |  testbench1 - OS(KC_A) |  |
 |                        | layer | PRESS + TG         | Keycode   |  testbench1 - TG(KC_   |  |
 |                        | layer | MT\_TAP            | Keycode   |             |  |
 |                        | layer | MT\_HOLD           | Keycode   |             |  |
 |                        | layer | DT\_TAP            | Keycode   |             |  |
 |                        | layer | DT\_DOUBLTAP       | Keycode   |             |  |
-| Master                 | layer | PRESS              | Modifiers |  testbench1 - KC_LCTL  |  |
+| Master                 | layer | PRESS              | Modifiers |  testbench1 - KC_LCTL  | OK |
+|                        | layer | PRESS + KC_TRNS    | Modifiers |  testbench1 - KC_LSFT  | OK |
 |                        | layer | PRESS + OS         | Modifiers |  testbench1 - OS(KC_LCTL)  |  |
 |                        | layer | PRESS + TG         | Modifiers |  testbench1 - TG(KC_LCTL)  |  |
 |                        | layer | MT\_TAP            | Modifiers |             |  |
 |                        | layer | MT\_HOLD           | Modifiers |             |  |
 |                        | layer | DT\_TAP            | Modifiers |             |  |
 |                        | layer | DT\_DOUBLTAP       | Modifiers |             |  |
-| Master                 | layer | PRESS              | LAYERS    |             |  |
+| Master                 | layer | PRESS              | LAYERS    |             |   |
+|                        | layer | PRESS + KC_TRNS    | LAYERS    | testbench1 - LAYER_1   | OK  |
 |                        | layer | MT\_TAP            | LAYERS    |             |  |
 |                        | layer | MT\_HOLD           | LAYERS    |             |  |
 |                        | layer | DT\_TAP            | LAYERS    |             |  |
 |                        | layer | DT\_DOUBLTAP       | LAYERS    |             |  |
 | Master                 | layer | PRESS              | Media     | testbench1 - KC_WWW  | BUG: should send 1, not repeated when held  |
+|                        | layer | PRESS + KC_TRNS    | Media     | testbench1 - KC_CALC  | BUG: should send 1, not repeated when held  |
 |                        | layer | PRESS + OS         | Media     | testbench1 - KC_WWW  | BUG: should send 1, not repeated when held  |
 |                        | layer | PRESS + TG         | Media     | testbench1 - KC_WWW  | BUG: should send 1, not repeated  |
 |                        | layer | MT\_TAP            | Media     |             |  |
