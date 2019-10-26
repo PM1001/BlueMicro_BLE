@@ -30,10 +30,10 @@ void setupKeymap() {
 
     uint32_t layer1[MATRIX_ROWS][MATRIX_COLS] =
         KEYMAP(
-    KC_HOME,    KC_UP,    KC_PGUP,    KC_ESCAPE,    
-    KC_LEFT,    KC_NO,    KC_RIGHT,    KC_DELETE,  
-    KC_END,    KC_DOWN,    KC_PGDN,    KC_KP_ENTER,    
-    LAYER_1, KC_INS,    KC_DEL,  KC_KP_ENTER);
+            KC_A,    KC_B,    KC_C,    KC_D,    
+            KC_E,    KC_F,    KC_G,    KC_H,  
+            KC_I,    KC_J,    KC_K,    KC_L,    
+            _______, KC_M,    KC_N,  KC_O);
 
     /*
      * add the other layers

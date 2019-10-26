@@ -17,12 +17,19 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 */
 #include "keymap.h"
 
+// backlight tests
+// USB/BLE tests - not applicable for nrf52832. only for future use with the nrf52840
+
+
+
+
+
 std::array<std::array<Key, MATRIX_COLS>, MATRIX_ROWS> matrix =
     {{
-        {KC_7,    KC_8,    KC_9,    KC_KP_SLASH,},
-        {KC_4,    KC_5,    KC_6,    KC_KP_ASTERISK,},
-        {KC_1,    KC_2,    KC_3,    KC_KP_MINUS,},
-        {LAYER_1, KC_0,    KC_DOT,  KC_KP_PLUS}
+        {BL_TOGG,   BL_STEP,   BL_BRTG,  BL_REACT,},
+        {BL_ON,     BL_OFF,    BL_INC,   BL_DEC,},
+        {OUT_AUTO,  OUT_USB,   OUT_BT,   KC_NO,},
+        {LAYER_1,   KC_NO,     KC_NO,    KC_NO}
     }};
 
  
@@ -30,10 +37,10 @@ void setupKeymap() {
 
     uint32_t layer1[MATRIX_ROWS][MATRIX_COLS] =
         KEYMAP(
-            KC_A,    KC_B,    KC_C,    KC_D,    
-            KC_E,    KC_F,    KC_G,    KC_H,  
-            KC_I,    KC_J,    KC_K,    KC_L,    
-            _______, KC_M,    KC_N,  KC_O);
+           BL_TOGG,   BL_STEP,   BL_BRTG,  BL_REACT,
+           BL_ON,     BL_OFF,    BL_INC,   BL_DEC,
+           OUT_AUTO,  OUT_USB,   OUT_BT,   KC_NO,  
+           _______, KC_M,    KC_N,  KC_O );
 
     /*
      * add the other layers

@@ -358,7 +358,7 @@ bool KeyScanner::getReport()
     currentReport[0] = currentMod;
     currentReport[7] = localLayer;
 
-    if((currentReport[0] != 0) | (currentReport[1] != 0)| (currentReport[2] != 0)| (currentReport[3] != 0)| (currentReport[4] != 0)| (currentReport[5] != 0)| (currentReport[6] != 0))
+    if((currentReport[0] + currentReport[1] + currentReport[2] + currentReport[3] + currentReport[4] + currentReport[5] + currentReport[6]) > 0)
     {reportEmpty = false;}
     else
     {reportEmpty = true;}

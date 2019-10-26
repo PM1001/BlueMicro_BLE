@@ -28,17 +28,14 @@ using namespace Adafruit_LittleFS_Namespace;
 // Keyboard Matrix
 byte rows[] MATRIX_ROW_PINS;        // Contains the GPIO Pin Numbers defined in keyboard_config.h
 byte columns[] MATRIX_COL_PINS;     // Contains the GPIO Pin Numbers defined in keyboard_config.h  
-
-//const uint8_t boot_mode_commands [BOOT_MODE_COMMANDS_COUNT][2] BOOT_MODE_COMMANDS;
-
-SoftwareTimer keyscantimer, monitoringtimer, batterytimer;//, RGBtimer;
-
 KeyScanner keys;
-
 bool isReportedReleased = true;
-//uint8_t monitoring_state = STATE_BOOT_INITIALIZE;
-
 uint32_t run_command_page_bluemicro = 0;
+
+uint32_t loop_counter_pwm = DEFAULT_LOOP_COUNTER_PWM;
+uint32_t loop_counter_rgb = DEFAULT_LOOP_COUNTER_RGB;
+uint32_t loop_counter_battery = DEFAULT_LOOP_COUNTER_BATTERY;
+uint32_t loop_counter_commands = DEFAULT_LOOP_COUNTER_COMMANDS;
 
 /**************************************************************************************************************************/
 // put your setup code here, to run once:
@@ -56,9 +53,9 @@ void setup() {
 
  // Scheduler.startLoop(monitoringloop);                                        // Starting second loop task for monitoring tasks
 
-  keyscantimer.begin(HIDREPORTINGINTERVAL*2, keyscantimer_callback);
-  monitoringtimer.begin(HIDREPORTINGINTERVAL*20, monitoringtimer_callback);
-  batterytimer.begin(30*1000, batterytimer_callback);
+  //keyscantimer.begin(HIDREPORTINGINTERVAL*2, keyscantimer_callback);
+  //monitoringtimer.begin(HIDREPORTINGINTERVAL*20, monitoringtimer_callback);
+  //batterytimer.begin(30*1000, batterytimer_callback);
   //RGBtimer.begin(WS2812B_LED_COUNT*25, RGBtimer_callback);
   setupBluetooth();
 
@@ -67,16 +64,16 @@ void setup() {
   #endif
   #if WS2812B_LED_ON == 1 //setup PWM module
     setupRGB();
-  #endif
+  #endif+
   // Set up keyboard matrix and start advertising
   setupKeymap();
   setupMatrix();
   startAdv(); 
-  keyscantimer.start();
+  //keyscantimer.start();
   //monitoringtimer.start();
-  batterytimer.start();
+  //batterytimer.start();
   //RGBtimer.start();
-  suspendLoop(); // this commands suspends the main loop.  We are no longer using the loop but scheduling things using the timers.
+  //suspendLoop(); // this commands suspends the main loop.  We are no longer using the loop but scheduling things using the timers.
 };
 /**************************************************************************************************************************/
 //
@@ -115,13 +112,12 @@ void scanMatrix() {
           pinMode(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
           #endif
     }
-
       //delay(1);   // using the FreeRTOS delay function reduced power consumption from 1.5mA down to 0.9mA
       // need for the GPIO lines to settle down electrically before reading.
       #ifdef NRFX_H__  // Added to support BSP 0.9.0
-         nrfx_coredep_delay_us(1);
+         nrfx_coredep_delay_us(DEFAULT_SETTLING_DELAY);
       #else            // Added to support BSP 0.8.6
-        nrf_delay_us(1);
+        nrf_delay_us(DEFAULT_SETTLING_DELAY);
       #endif
 
       pindata = NRF_GPIO->IN;                                         // read all pins at once
@@ -141,21 +137,21 @@ void sendKeyPresses() {
    {                                                                              
         sendKeys();
         isReportedReleased = false;
-  //     LOG_LV1("MXSCAN","SEND: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] );        
+       LOG_LV1("MXSCAN","SEND: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] );        
     }
    else                                                                  //NO key presses anywhere
    {
     if ((!isReportedReleased)){
       sendRelease();  
       isReportedReleased = true;                                         // Update flag so that we don't re-issue the message if we don't need to.
-   //   LOG_LV1("MXSCAN","RELEASED: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] ); 
+      LOG_LV1("MXSCAN","RELEASED: %x %x %x %x %x %x %x %x %x %x" ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] ); 
     }
    }
   #if BLE_PERIPHERAL ==1   | BLE_CENTRAL ==1                            /**************************************************/
     if(KeyScanner::layerChanged)                                               //layer comms
     {   
         sendlayer(KeyScanner::localLayer);
-   //     LOG_LV1("MXSCAN","Layer %i  %i" ,millis(),KeyScanner::localLayer);
+        LOG_LV1("MXSCAN","Layer %i  %i" ,millis(),KeyScanner::localLayer);
         KeyScanner::layerChanged = false;                                      // mark layer as "not changed" since last update
     } 
   #endif                                                                /**************************************************/
@@ -163,12 +159,64 @@ void sendKeyPresses() {
 /**************************************************************************************************************************/
 // put your main code here, to run repeatedly:
 /**************************************************************************************************************************/
-void loop() {};  // loop is now empty and no longer being called.
+void loop() {
+
+    keyscantimer_callback(); // call every time...
+
+    if (loop_counter_commands == 0)
+    {
+      loop_counter_commands = DEFAULT_LOOP_COUNTER_COMMANDS;
+      monitoringtimer_callback(); // call every DEFAULT_LOOP_COUNTER_COMMANDS
+    }
+    else
+    {
+      loop_counter_commands--;
+      unsigned long timesincelastkeypress = millis() - KeyScanner::getLastPressed();
+        if (loop_counter_pwm == 0)
+        {
+          loop_counter_pwm = DEFAULT_LOOP_COUNTER_PWM;
+              #if BACKLIGHT_PWM_ON == 1
+                updatePWM(1, timesincelastkeypress);
+              #endif // call every DEFAULT_LOOP_COUNTER_PWM
+        }
+        else
+        {
+          loop_counter_pwm--;
+                  if (loop_counter_rgb == 0)
+                  {
+                    loop_counter_rgb = DEFAULT_LOOP_COUNTER_RGB;
+                    #if WS2812B_LED_ON == 1  
+                    updateRGB(1, timesincelastkeypress);
+                    #endif// call every DEFAULT_LOOP_COUNTER_RGB
+                  }
+                  else
+                  {
+                    loop_counter_rgb--;
+                        if (loop_counter_battery == 0)
+                        {
+                          loop_counter_battery = DEFAULT_LOOP_COUNTER_BATTERY;
+                          #if BLE_LIPO_MONITORING == 1
+                            updateBattery();
+                          #endif// call every DEFAULT_LOOP_COUNTER_BATTERY
+                        }
+                        else
+                        {
+                          loop_counter_battery--;  
+                        }
+                  }
+        }
+    }
+
+    sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
+    sd_app_evt_wait();
+    delay (HIDREPORTINGINTERVAL);
+
+}; 
 
 /**************************************************************************************************************************/
 // put your key scanning code here, to run repeatedly:
 /**************************************************************************************************************************/
-void keyscantimer_callback(TimerHandle_t _handle) {
+void keyscantimer_callback() {
     #if MATRIX_SCAN == 1
     scanMatrix();
   #endif
@@ -187,43 +235,10 @@ void keyscantimer_callback(TimerHandle_t _handle) {
       Bluefruit.Scanner.start(0);                                                     // 0 = Don't stop scanning after 0 seconds  ();
     }
   #endif
-
-  #if BACKLIGHT_PWM_ON == 1
-    updatePWM(1, timesincelastkeypress);
-  #endif
-
-    #if WS2812B_LED_ON == 1 
-     updateRGB(1, timesincelastkeypress);
-    #endif
-
-  sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
-  sd_app_evt_wait();
-}
-//********************************************************************************************//
-//* Battery Monitoring Task - runs infrequently - except in boot mode                        *//
-//********************************************************************************************//
-void batterytimer_callback(TimerHandle_t _handle)
-{
-    #if BLE_LIPO_MONITORING == 1
-      updateBattery();
-    #endif
-    sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
-    sd_app_evt_wait();
-}
-
-void RGBtimer_callback(TimerHandle_t _handle)
-{
-    #if WS2812B_LED_ON == 1 
-      unsigned long timesincelastkeypress = millis() - KeyScanner::getLastPressed();
-     updateRGB(0, timesincelastkeypress);
-    #endif
-    sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
-    sd_app_evt_wait();
 }
 
 
-
-void monitoringtimer_callback(TimerHandle_t _handle)
+void monitoringtimer_callback()
 {
 
   switch(run_command_page_bluemicro)
@@ -278,10 +293,6 @@ void monitoringtimer_callback(TimerHandle_t _handle)
 
   }
   run_command_page_bluemicro = 0;
-
-  
-  sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
-  sd_app_evt_wait();
 };
 //********************************************************************************************//
 //* Idle Task - runs when there is nothing to do                                             *//
@@ -290,6 +301,6 @@ void monitoringtimer_callback(TimerHandle_t _handle)
 void rtos_idle_callback(void) {
   // Don't call any other FreeRTOS blocking API()
   // Perform background task(s) here
-  sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
+    sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
     sd_app_evt_wait();  // puts the nrf52 to sleep when there is nothing to do.  You need this to reduce power consumption. (removing this will increase current to 8mA)
 };

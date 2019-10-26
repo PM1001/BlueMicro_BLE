@@ -37,10 +37,16 @@ void setupMatrix(void);
 void scanMatrix(void);
 void sendKeyPresses(void);
 
-void keyscantimer_callback(TimerHandle_t _handle);
-void monitoringtimer_callback(TimerHandle_t _handle);
-void batterytimer_callback(TimerHandle_t _handle);
-void RGBtimer_callback(TimerHandle_t _handle);
+//void keyscantimer_callback(TimerHandle_t _handle);
+//void monitoringtimer_callback(TimerHandle_t _handle);
+//void batterytimer_callback(TimerHandle_t _handle);
+//void RGBtimer_callback(TimerHandle_t _handle);
+void keyscantimer_callback();
+void monitoringtimer_callback();
+//void batterytimer_callback();
+//void RGBtimer_callback();
+
+/*
 enum states_monitor_modes {
   STATE_BOOT_INITIALIZE = 0x00,
   STATE_BOOT_MODE,
@@ -49,6 +55,6 @@ enum states_monitor_modes {
   STATE_BOOT_WIRELESS_DFU,
   STATE_MONITOR_MODE,
   STATE_BOOT_UNKNOWN,
-  };
+  };*/
 
 #endif /* FIRMWARE_H */

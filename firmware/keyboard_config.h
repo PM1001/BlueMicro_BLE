@@ -24,43 +24,43 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define KEYBOARD_SIDE MASTER
 
 
-#define DEVICE_NAME_R                         "GherkinBLE_R"                          /**< Name of device. Will be included in the advertising data. */
-#define DEVICE_NAME_L                         "GherkinBLE_L"                          /**< Name of device. Will be included in the advertising data. */
-#define DEVICE_NAME_M                         "GherkinBLE"                          /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME_R                         "4x4Numpad_R"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME_L                         "4x4Numpad_L"                         /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME_M                         "4x4Numpad"                           /**< Name of device. Will be included in the advertising data. */
 
-#define DEVICE_MODEL                        "GherkinBLE_V1"                          /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_MODEL                        "4x4Numpad_V1"                          /**< Name of device. Will be included in the advertising data. */
 
-#define MANUFACTURER_NAME                   "40Percent.Club"                      /**< Manufacturer. Will be passed to Device Information Service. */
+#define MANUFACTURER_NAME                   "keyboards.jpconstantineau.com"         /**< Manufacturer. Will be passed to Device Information Service. */
 
 
 /* HARDWARE DEFINITION*/
 /* key matrix size */
-#define MATRIX_ROWS 5
-#define MATRIX_COLS 6
+#define MATRIX_ROWS 4
+#define MATRIX_COLS 4
 
-#define MATRIX_ROW_PINS {2, 12, 14, 13, 11 }
-#define MATRIX_COL_PINS {15, 30, 29, 28, 27,26 }
-#define UNUSED_PINS {}
-#define BACKLIGHT_LED_PIN B5 
+#define MATRIX_ROW_PINS {25, 26, 27, 28}
+#define MATRIX_COL_PINS {29, 30, 2, 3}
 
-#define BACKLIGHT_PWM_ON 1   
+#define BACKLIGHT_LED_PIN 23
+#define BACKLIGHT_PWM_ON 1 
+
+#define WS2812B_LED_PIN 24
+#define WS2812B_LED_COUNT 1
+#define WS2812B_LED_ON 0 
+
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
 
-#define DEBOUNCETIME 20
-
-
-
 #define KEYMAP( \
-	 K00,   K01,   K02,   K03,   K04,   K05,   K10,   K11,   K12,   K13 , \
-	 K14,   K15,   K20,   K21,   K22,   K23,   K24,   K25,   K30,   K31 , \
-	 K32,   K33,   K34,   K35,   K40,   K41,   K42,   K43,   K44,   K45   \
+	 K00,   K01,   K02,   K03,      \
+	 K10,   K11,   K12,   K13,     \
+	 K20,   K21,   K22,   K23,     \
+	 K30,   K31,   K32,   K33 \
 ) { \
-	{ K00,   K01,   K02,   K03,   K04,   K05 }, \
-	{ K10,   K11,   K12,   K13,   K14,   K15 }, \
-	{ K20,   K21,   K22,   K23,   K24,   K25 }, \
-	{ K30,   K31,   K32,   K33,   K34,   K35 }, \
-	{ K40,   K41,   K42,   K43,   K44,   K45 }  \
+	{ K00,   K01,   K02,   K03,   }, \
+	{ K10,   K11,   K12,   K13,   }, \
+	{ K20,   K21,   K22,   K23,   }, \
+	{ K30,   K31,   K32,   K33    } \
 }
 
 
