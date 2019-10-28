@@ -19,23 +19,29 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 */
 #ifndef FIRMWARE_H
 #define FIRMWARE_H
+#include <bluefruit.h>
+#include <Adafruit_LittleFS.h>
+#include <InternalFileSystem.h>
 #undef min
 #undef max
-#include "hardware_variants.h"
-#include "firmware_config.h"
 #include "bluetooth_config.h"
+#include "firmware_config.h"
+#include "hardware_variants.h"
+#include "keyboard_config.h"
+#include "avr_mapping.h"
 #include "KeyScanner.h"
-#include "keymap.h"
 #include "sleep.h"
 #include "bluetooth.h"
 #include "battery.h"
 #include "LedPwm.h"
 #include "LedRGB.h"
 #include "gpio.h"
+#include "keymap.h"
 
 void setupMatrix(void);
 void scanMatrix(void);
 void sendKeyPresses(void);
+
 
 //void keyscantimer_callback(TimerHandle_t _handle);
 //void monitoringtimer_callback(TimerHandle_t _handle);
@@ -56,5 +62,14 @@ enum states_monitor_modes {
   STATE_MONITOR_MODE,
   STATE_BOOT_UNKNOWN,
   };*/
+
+#ifndef USER_MACRO_FUNCTION 
+#define USER_MACRO_FUNCTION   0 
+#define DEFAULT_USER_MACRO_FUNCTION   1 
+void process_user_macros(uint32_t macroid);
+#else  
+#define DEFAULT_USER_MACRO_FUNCTION   0
+#endif
+
 
 #endif /* FIRMWARE_H */

@@ -390,6 +390,8 @@ enum hid_keyboard_keypad_usage {
 #define PAGE_BLUEMICRO 0xF0  // for keyboard changing functions
 #define PAGE_MACRO     0xF1  // for calling macros
 
+#define MC(KCODE)        ((uint32_t) (KCODE)                              | (uint32_t) (PAGE_MACRO << 24))  // pre-processor macro to define macro keycodes
+
 #define KC_SYSTEM_POWER     ((uint32_t) HID_USAGE_CONSUMER_POWER             | (uint32_t) (PAGE_MEDIA << 24))
 #define KC_SYSTEM_SLEEP	    ((uint32_t) HID_USAGE_CONSUMER_SLEEP             | (uint32_t) (PAGE_MEDIA << 24))
 #define KC_AUDIO_MUTE	    ((uint32_t) HID_USAGE_CONSUMER_MUTE              | (uint32_t) (PAGE_MEDIA << 24))
@@ -525,7 +527,7 @@ enum hid_keyboard_keypad_usage {
 #define RGB_MODE_RGBTEST    ((uint32_t) 0x1031     | (uint32_t) (PAGE_BLUEMICRO << 24))
 #define RGB_M_T             RGB_MODE_RGBTEST
 #define RGB_SPI             ((uint32_t) 0x1032     | (uint32_t) (PAGE_BLUEMICRO << 24))
-#define RGB_SPI             ((uint32_t) 0x1033     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define RGB_SPD             ((uint32_t) 0x1033     | (uint32_t) (PAGE_BLUEMICRO << 24))
 
 
 #endif /* HID_KEYCODES_H */

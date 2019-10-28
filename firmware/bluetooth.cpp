@@ -410,9 +410,10 @@ void sendKeys()
                   case PAGE_UNICODE:
                       break;
                   case PAGE_BLUEMICRO:
-                     // run_command_page_bluemicro = thiskeycode;
+                      run_command_page_bluemicro = thiskeycode;
                       break;
                   case PAGE_MACRO:
+                      run_command_page_bluemicro = thiskeycode;
                       break;
                   default: // applies to PAGE_DEFAULT and PAGE_KEYBOARD
                       keycode[index] = static_cast<uint8_t>(thiskeycode);                                           // Buffer 
@@ -452,4 +453,8 @@ void sendRelease()
           // Only send layer to slaves
           ;                                                              // Central does not need to send the buffer to the Peripheral.
     #endif
+}
+void sendString(const char* str)
+{
+    blehid.keySequence(str,1);
 }

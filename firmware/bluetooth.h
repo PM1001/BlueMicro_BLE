@@ -19,16 +19,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 */
 #ifndef BLUETOOTH_H
 #define BLUETOOTH_H
-#include <bluefruit.h>
-#include "firmware_config.h"
-#include "bluetooth_config.h"
-#undef min
-#undef max
-
-#include "KeyScanner.h"
-#include "battery.h"
-
-
+#include "firmware.h"
 
 void setupBluetooth(void);
 void startAdv(void);
@@ -36,6 +27,7 @@ void set_keyboard_led(uint16_t conn_handle, uint8_t led_bitmap);
 
 void sendKeys();
 void sendRelease();
+void sendString(const char* str);
 
 #if BLE_PERIPHERAL ==1   | BLE_CENTRAL ==1 
 void sendlayer(uint8_t layer);

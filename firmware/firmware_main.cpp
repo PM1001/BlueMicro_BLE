@@ -18,11 +18,8 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 */
 /**************************************************************************************************************************/
-#include <bluefruit.h>
-#include "firmware.h"
-#include <Adafruit_LittleFS.h>
-#include <InternalFileSystem.h>
 
+#include "firmware.h"
 using namespace Adafruit_LittleFS_Namespace;
 /**************************************************************************************************************************/
 // Keyboard Matrix
@@ -245,23 +242,25 @@ void monitoringtimer_callback()
   {
     // CORE BLUEMICRO FUNCTIONS
     case RESET:
-     // enterSerialDfu();
+      NVIC_SystemReset();
     break;  
     case DEBUG:
-      
+      ;
     break;   
     case SERIAL_DFU:
-     // enterSerialDfu();
+       enterSerialDfu();
     break;
     case DFU:
-    //  enterOTADfu();
+       enterOTADfu();
     break;
     case CLEAR_BONDS:
-     // InternalFS.format();  // using formatting instead of clearbonds due to the potential issue with corrupted file system and the keybord being stuck not being able to pair and save bonds.
+      Bluefruit.clearBonds();
+      Bluefruit.Central.clearBonds();
     break;
     case EEPROM_RESET:
-    //  InternalFS.format();  // using formatting instead of clearbonds due to the potential issue with corrupted file system and the keybord being stuck not being able to pair and save bonds.
+      InternalFS.format();  // using formatting instead of clearbonds due to the potential issue with corrupted file system and the keybord being stuck not being able to pair and save bonds.
     break;
+    // USB/BLE FUNCTIONS - OUT_AUTO - OUT_USB - OUT_BT
 
     // BACKLIGHT FUNCTIONS
     case BL_TOGG:
@@ -289,11 +288,80 @@ void monitoringtimer_callback()
       
     break;
 
-    // USB/BLE FUNCTIONS - OUT_AUTO - OUT_USB - OUT_BT
-
+    // RGB FUNCTIONS
+    case RGB_TOG:
+      
+    break;
+    case RGB_MOD:
+      
+    break;
+    case RGB_RMOD:
+      
+    break;
+    case RGB_HUI:
+      
+    break;
+    case RGB_HUD:
+      
+    break;
+    case RGB_SAI:
+      
+    break;
+    case RGB_SAD:
+      
+    break;
+    case RGB_VAI:
+      
+    break;
+    case  RGB_VAD:
+      
+    break;
+    case RGB_M_P:
+      
+    break;
+    case RGB_M_B:
+      
+    break;
+    case RGB_M_R:
+      
+    break;
+    case RGB_M_SW:
+      
+    break;
+    case RGB_M_SN:
+      
+    break;
+    case RGB_M_K:
+      
+    break;
+    case RGB_M_X:
+      
+    break;
+    case  RGB_M_G:
+      
+    break;
+    case RGB_M_T:
+      
+    break;
+    case RGB_SPI:
+      
+    break;
+    case RGB_SPD:
+      
+    break;
+    default:
+       process_user_macros(run_command_page_bluemicro); // call macros
+    break;        
   }
   run_command_page_bluemicro = 0;
 };
+
+#if DEFAULT_USER_MACRO_FUNCTION == 1
+void process_user_macros(uint32_t macroid)
+{
+  ; // default macro function that's empty.
+}
+#endif
 //********************************************************************************************//
 //* Idle Task - runs when there is nothing to do                                             *//
 //* Any impact of placing code here on current consumption?                                  *//
@@ -304,3 +372,4 @@ void rtos_idle_callback(void) {
     sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
     sd_app_evt_wait();  // puts the nrf52 to sleep when there is nothing to do.  You need this to reduce power consumption. (removing this will increase current to 8mA)
 };
+

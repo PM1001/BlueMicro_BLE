@@ -17,21 +17,28 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#include <stdint.h>
+#include "hid_keycodes.h"
+#include "keyboard_config.h"
+#include "advanced_keycodes.h"
+#include "Key.h"
+#include <array>
 
-#ifndef BATTERY_H
-#define BATTERY_H
-#include "firmware.h"
-  //  #include <Arduino.h>
-  //  #include <bluefruit.h>
-  //  #include "firmware_config.h"
-  //  #include "keyboard_config.h"
+#ifndef KEYMAP_H
+#define KEYMAP_H
 
-    #if BLE_LIPO_MONITORING == 1
-        int readVBAT(void);
-        uint8_t mvToPercent(float mvolts);
-        void updateBattery(void);
-    #endif
-    #if BLE_CR2032_MONITORING == 1
+#define KC_CAP_D MOD(MOD_LSHIFT, KC_D)
+#define NUM_LAYERS 2
 
-    #endif
-#endif
+#define _QWERTY 0
+#define _L1  1
+#define _PRESS 0
+#define _MT_TAP 1
+#define _MT_HOLD 2
+#define _DT_TAP 3
+#define _DT_DOUBLETAP 4
+
+void setupKeymap();
+extern std::array<std::array<Key, MATRIX_COLS>, MATRIX_ROWS> matrix;
+
+#endif /* KEYMAP_H */

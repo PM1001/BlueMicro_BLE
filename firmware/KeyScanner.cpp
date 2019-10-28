@@ -335,10 +335,16 @@ bool KeyScanner::getReport()
                     ++bufferposition;
                 break;
             case PAGE_UNICODE:
+                     currentReport[bufferposition] = keycode;
+                    ++bufferposition;
                 break;
             case PAGE_BLUEMICRO:
+                     currentReport[bufferposition] = keycode;
+                    ++bufferposition;
                 break;
             case PAGE_MACRO:
+                     currentReport[bufferposition] = keycode;
+                    ++bufferposition;
                 break;
 
             default: // applies to PAGE_DEFAULT and PAGE_KEYBOARD
