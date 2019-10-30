@@ -3,6 +3,7 @@
 param(
     [string]$BoardParam="ask",
     [switch]$Verbose=$false,
+    [switch]$nrf52840=$false,
     [switch]$ContinueOnError=$false
 )
 
@@ -110,7 +111,7 @@ Function Compile-Board($keyboard, $target, $keymap) {
 	Start-Sleep -s 2
 	
     # Run compile
-    $cmdCompile = 
+    $cmdCompile832 = 
         '& "$BuilderExe" -compile -logger=machine -warnings "none" -verbose -ide-version "10807" -debug-level 1 ' + 
         '-hardware "$ArduinoDir\hardware" -hardware "$ArduinoDataDir\packages" ' + 
         '-tools "$ArduinoDir\tools-builder" -tools "$ArduinoDir\hardware\tools\avr" -tools "$ArduinoDataDir\packages" ' +
@@ -119,6 +120,18 @@ Function Compile-Board($keyboard, $target, $keymap) {
         '-build-path "$BuildDir" -build-cache "$BuildCacheDir" '
         #'-prefs "build.warn_data_percentage=75" -prefs "runtime.tools.nrfjprog.path=$ArduinoDataDir\packages\adafruit\tools\nrfjprog\9.4.0" -prefs "runtime.tools.gcc-arm-none-eabi.path=$ArduinoDataDir\packages\adafruit\tools\gcc-arm-none-eabi\5_2-2015q4" '
 
+    $cmdCompile840 = 
+        '& "$BuilderExe" -compile -logger=machine -warnings "none" -verbose -ide-version "10807" -debug-level 1 ' + 
+        '-hardware "$ArduinoDir\hardware" -hardware "$ArduinoDataDir\packages" ' + 
+        '-tools "$ArduinoDir\tools-builder" -tools "$ArduinoDir\hardware\tools\avr" -tools "$ArduinoDataDir\packages" ' +
+        '-built-in-libraries "$ArduinoDir\libraries"' +
+        '-fqbn "adafruit:nrf52:pca10056:softdevice=s140v6,debug=l0" ' +
+        '-build-path "$BuildDir" -build-cache "$BuildCacheDir" '
+
+    if ($nrf52840) 
+    {$cmdCompile = $cmdCompile840} 
+    else
+    {$cmdCompile = $cmdCompile832}    
     if ($Verbose) {
         #$cmdCompile += '-verbose '
     }

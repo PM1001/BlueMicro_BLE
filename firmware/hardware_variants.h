@@ -20,6 +20,33 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 #ifndef HARDWAREVARIANTS_H
 #define HARDWAREVARIANTS_H
+/*
+The following can be selected from the Tools->Boards Arduino Menu when compiling
+NRF52832_FEATHER
+NRF52840_FEATHER
+NRF52840_ITSYBITSY
+NRF52840_CIRCUITPLAY
+NRF52840_METRO
+NRF52840_PCA10056
+*/
+#ifdef ARDUINO_NRF52832_FEATHER
+  #warning "Compiling for the nrf52832"
+#endif
+#ifdef ARDUINO_NRF52840_FEATHER
+  #error "Compiling for the nrf52840 Feather - not supported"
+#endif
+#ifdef ARDUINO_NRF52840_ITSYBITSY
+  #error "Compiling for the nrf52840 ItsyBitsy - not supported"
+#endif
+#ifdef ARDUINO_NRF52840_CIRCUITPLAY
+  #error "Compiling for the nrf52840 CircuitPlay - not supported"
+#endif
+#ifdef ARDUINO_NRF52840_METRO
+  #error "Compiling for the nrf52840 metro - not supported"
+#endif
+#ifdef ARDUINO_NRF52840_PCA10056
+  #warning "Compiling for the nrf52840"
+#endif
 
 #define FEATHERNRF52832 0
 #define BLUEMICROV1_0   1

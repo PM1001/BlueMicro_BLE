@@ -29,13 +29,13 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 #define KEYBOARD_SIDE MASTER
 
-#if   KEYBOARD_SIDE == RIGHT
-#define DEVICE_NAME                         "Chocopad_R"                          /**< Name of device. Will be included in the advertising data. */
-#elif KEYBOARD_SIDE == LEFT
-#define DEVICE_NAME                         "Chocopad_L"                          /**< Name of device. Will be included in the advertising data. */
-#else
+
+#define DEVICE_NAME_R                       "Chocopad_R"                          /**< Name of device. Will be included in the advertising data. */
+
+#define DEVICE_NAME_L                      "Chocopad_L"                          /**< Name of device. Will be included in the advertising data. */
+
 #define DEVICE_NAME_M                         "Chocopad"                          /**< Name of device. Will be included in the advertising data. */
-#endif
+
 
 #define DEVICE_MODEL                        "Chocopad_v1"                          /**< Name of device. Will be included in the advertising data. */
 
