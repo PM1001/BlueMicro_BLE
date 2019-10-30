@@ -43,14 +43,14 @@ We need to cover a number of permutations for all the options in the following c
 
 ## Summary of Testbenches
 
-| Keyboard               | Keymap     | Description of tests | c       | c          | c      |
-| ---------------------- | ---------- | -------------------- | --------- | ----------------------- | ------------- |
-| 4x4Backpack            | testbench1 | Activation Durations |   |        |           |
-| 4x4Backpack            | testbench2 | PRESS                |   |        |           |
-| 4x4Backpack            | testbench3 | BackLight Commands   |   |        |           |
-| 4x4Backpack            | testbench4 | RGB commands         |   |        |           |
-| 4x4Backpack            | testbench5 | Keyboard commands    |   |        |           |
-| 4x4Backpack            | testbench6 | User macros          |   |        |           |
+| Keyboard                   | Keymap     | Description of tests | Keys      | Consumer  | BlueMicro |  Macros   |
+| -------------------------- | ---------- | -------------------- | --------- | --------- | --------- | --------- |
+| 4x4Backpack                | testbench1 | Activation Durations |     X     |    X      |           |           |
+| 4x4Backpack                | testbench2 | PRESS                |     X     |    X      |           |           |
+| 4x4Backpack (4x4platform)  | testbench3 | BackLight Commands   |           |           |      X    |           |
+| 4x4Backpack (4x4platform)  | testbench4 | RGB commands         |           |           |      X    |           |
+| 4x4Backpack                | testbench5 | Keyboard commands    |           |           |      X    |           |
+| 4x4Backpack                | testbench6 | User macros          |           |           |           |    X      |
 
 ## Details of all test cases to cover
 
