@@ -41,6 +41,17 @@ We need to cover a number of permutations for all the options in the following c
 
 * KC_TRNS on layers
 
+## Summary of Testbenches
+
+| Keyboard               | Keymap     | Description of tests | c       | c          | c      |
+| ---------------------- | ---------- | -------------------- | --------- | ----------------------- | ------------- |
+| 4x4Backpack            | testbench1 | Activation Durations |   |        |           |
+| 4x4Backpack            | testbench2 | PRESS                |   |        |           |
+| 4x4Backpack            | testbench3 | BackLight Commands   |   |        |           |
+| 4x4Backpack            | testbench4 | RGB commands         |   |        |           |
+| 4x4Backpack            | testbench5 | Keyboard commands    |   |        |           |
+| 4x4Backpack            | testbench6 | User macros          |   |        |           |
+
 ## Details of all test cases to cover
 
 **NOTE: this table represents the results of tests performed in this branch.  Lots of changed occurred: mainly the switch from 8/16 bit keycodes to 32 bits activation codes.

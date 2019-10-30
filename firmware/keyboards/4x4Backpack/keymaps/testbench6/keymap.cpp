@@ -22,7 +22,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 std::array<std::array<Key, MATRIX_COLS>, MATRIX_ROWS> matrix =
     {{
-        {MC(KC_A),   MC(KC_B),  MC(KC_C),  MC(KC_D),},
+        {MC(KC_A),   MC(KC_B), KC_NO ,KC_NO  ,},
         {KC_NO,    KC_NO ,    KC_NO,   KC_NO,},
         {KC_NO,  KC_NO,   KC_NO,   KC_NO,},
         {LAYER_1,   KC_0,     KC_NO,    RESET}
@@ -33,7 +33,7 @@ void setupKeymap() {
 
     uint32_t layer1[MATRIX_ROWS][MATRIX_COLS] =
         KEYMAP(
-           KC_NO,   KC_NO,   KC_NO,  KC_NO,
+           KC_NO,   KC_NO,   MC(KC_C), MC(KC_D),
            KC_NO,     KC_NO,    KC_NO,   KC_NO,
            KC_NO,  KC_NO,   KC_NO,   KC_NO,  
            _______, KC_1,    KC_NO,  KC_NO );
