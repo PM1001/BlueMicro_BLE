@@ -19,6 +19,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 */
 #include "sleep.h"
 #include "LedRGB.h"
+#include "LedPWM.h"
 /**************************************************************************************************************************/
 // Change Pin Mode - including Sense
 // ToDo: Move to adafruit library?
@@ -111,6 +112,9 @@ void gotoSleep(unsigned long timesincelastkeypress,bool connected)
     #if WS2812B_LED_ON == 1 
     suspendRGB();
     #endif
+    #if BACKLIGHT_PWM_ON == 1
+    sendPWM(0);
+    #endif
     setupWakeUp();
     sd_power_system_off();
   } 
@@ -121,6 +125,9 @@ void gotoSleep(unsigned long timesincelastkeypress,bool connected)
     LOG_LV2("SLEEP","Connected Sleep %i", timesincelastkeypress);
     #if WS2812B_LED_ON == 1 
     suspendRGB();
+    #endif
+    #if BACKLIGHT_PWM_ON == 1
+    sendPWM(0);
     #endif
     setupWakeUp();
     sd_power_system_off();

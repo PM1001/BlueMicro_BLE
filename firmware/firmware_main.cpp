@@ -173,7 +173,7 @@ void loop() {
         {
           loop_counter_pwm = DEFAULT_LOOP_COUNTER_PWM;
               #if BACKLIGHT_PWM_ON == 1
-                updatePWM(1, timesincelastkeypress);
+                updatePWM( timesincelastkeypress);
               #endif // call every DEFAULT_LOOP_COUNTER_PWM
         }
         else
@@ -264,29 +264,37 @@ void monitoringtimer_callback()
 
     // BACKLIGHT FUNCTIONS
     case BL_TOGG:
-      
+      stepPWMMode();
     break;
-    case BL_STEP:
-      
+    case BL_STEP:  // step through modes
+      stepPWMMode();
     break;
     case BL_ON:
-      
+      setPWMMode(3);
+      PWMSetMaxVal();
     break;
     case BL_OFF:
-      
+      setPWMMode(0);
     break;
     case BL_INC:
-      
+      incPWMMaxVal();
     break;
     case BL_DEC:
-      
+      decPWMMaxVal();
     break;
     case BL_BRTG:
-      
+      setPWMMode(1);
     break;
     case BL_REACT:
-      
+      setPWMMode(2);
+      PWMSetMaxVal();
     break;
+    case BL_STEPINC:
+        incPWMStepSize();
+      break;
+    case BL_STEPDEC:
+        decPWMStepSize();
+      break;
 
     // RGB FUNCTIONS
     case RGB_TOG:

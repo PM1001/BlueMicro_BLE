@@ -22,8 +22,24 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 //should be called with the keycode of the default layer
 Key::Key(uint32_t activation) 
 {
-    activations[0][0] = (activation & 0xFF00FFFF); 
-    durations[0][0] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+
+uint32_t page = ((activation & 0xFF00FFFF) >> 24); 
+
+switch (page)
+{
+    case PAGE_MEDIA:
+        activations[0][_MT_TAP] = (activation & 0xFF00FFFF); 
+        durations[0][_MT_TAP] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+    break;
+    case PAGE_BLUEMICRO:
+        activations[0][_MT_TAP] = (activation & 0xFF00FFFF); 
+        durations[0][_MT_TAP] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+    break;
+    default:
+        activations[0][0] = (activation & 0xFF00FFFF); 
+        durations[0][0] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+    break;
+}
 
     //last method is the "release" method
     lastMethod = 5;
@@ -54,15 +70,33 @@ void Key::addActivation(const uint8_t layer, const uint8_t method, const uint32_
 
         keycode = activations[--tempLayer][method];
     }
+uint32_t page = ((activation & 0xFF00FFFF) >> 24); 
 
-    activations[layer][method] = keycode;
-    durations[layer][method] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+switch (page)
+{
+    case PAGE_MEDIA:
+        activations[layer][_MT_TAP] = keycode;
+        durations[layer][_MT_TAP] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+        state.addMethod(_MT_TAP);
+    break;
+    case PAGE_BLUEMICRO:
+        activations[layer][_MT_TAP] = keycode;
+        durations[layer][_MT_TAP] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+        state.addMethod(_MT_TAP);
+    break;
+    default:
+        activations[layer][method] = keycode;
+        durations[layer][method] = static_cast<uint8_t>((activation & 0x00FF0000) >> 16);
+            /*
+            * tell the state to make sure to look for the added
+            * activation
+            */
+            state.addMethod(method);
+    break;
+}
 
-    /*
-     * tell the state to make sure to look for the added
-     * activation
-     */
-    state.addMethod(method);
+
+
 }
 
 void Key::press(const unsigned long currentMillis) 

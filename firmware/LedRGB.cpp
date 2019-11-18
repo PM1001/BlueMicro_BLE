@@ -71,7 +71,7 @@ if (timesincelastkeypress<PWM_TOUCH_INTERVAL)
  }
  else
  {
-     RGBval = 255 - timesincelastkeypress/10;
+     RGBval = 255 - timesincelastkeypress/1;
  }
  
  

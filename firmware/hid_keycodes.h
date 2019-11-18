@@ -491,7 +491,9 @@ enum hid_keyboard_keypad_usage {
 #define BL_INC              ((uint32_t) 0x1004     | (uint32_t) (PAGE_BLUEMICRO << 24))
 #define BL_DEC              ((uint32_t) 0x1005     | (uint32_t) (PAGE_BLUEMICRO << 24))
 #define BL_BRTG             ((uint32_t) 0x1006     | (uint32_t) (PAGE_BLUEMICRO << 24))
-#define BL_REACT             ((uint32_t) 0x1007     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_REACT            ((uint32_t) 0x1007     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_STEPINC          ((uint32_t) 0x1008     | (uint32_t) (PAGE_BLUEMICRO << 24))
+#define BL_STEPDEC          ((uint32_t) 0x1009     | (uint32_t) (PAGE_BLUEMICRO << 24))
 
 #define OUT_AUTO            ((uint32_t) 0x1010     | (uint32_t) (PAGE_BLUEMICRO << 24))
 #define OUT_USB             ((uint32_t) 0x1010     | (uint32_t) (PAGE_BLUEMICRO << 24))
