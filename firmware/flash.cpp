@@ -1,5 +1,5 @@
 /*
-Copyright 2018 <Pierre Constantineau>
+Copyright 2019 <Pierre Constantineau>
 
 3-Clause BSD License
 
@@ -17,44 +17,65 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef FIRMWARE_H
-#define FIRMWARE_H
-#include <bluefruit.h>
-#include <Adafruit_LittleFS.h>
-#include <InternalFileSystem.h>
-#undef min
-#undef max
-#include "bluetooth_config.h"
-#include "firmware_config.h"
-#include "hardware_variants.h"
-#include "keyboard_config.h"
-#include "avr_mapping.h"
-#include "KeyScanner.h"
 #include "flash.h"
-#include "sleep.h"
-#include "bluetooth.h"
-#include "battery.h"
-#include "LedPwm.h"
-#include "LedRGB.h"
-#include "gpio.h"
-#include "keymap.h"
+using namespace Adafruit_LittleFS_Namespace;
+File file(InternalFS);
 
-void setupMatrix(void);
-void scanMatrix(void);
-void sendKeyPresses(void);
+Flash::Flash()
+{
+  ;
+}
 
+void Flash::begin()
+{
+  InternalFS.begin();
+}
 
-void keyscan();
-void processmenu();
+void Flash::initialize()
+{
+    data.blepower = DEVICE_POWER;
+    data.pwmmode = 2;
+    data.pwmstepsize = 128;
+    data.pwmmaxvalue = DEFAULT_PWM_MAX_VALUE;
+    data.rgbmode = DEFAULT_RGB_MODE;
+    data.rgbhue = DEFAULT_RGB_HUE;
+    data.rgbsat = DEFAULT_RGB_SAT;
+    data.rgbval = DEFAULT_RGB_VAL;
+    writedata();
+}
 
+void Flash::readdata()
+{
+ file.open(FILENAME, FILE_O_READ);
+ if ( file ) // file exists
+  {
+    uint32_t readlen;
+    readlen = file.read( &data, sizeof(data));
+    file.close();
+    saved = true;
+  }else
+  {
+    initialize();
+  }
+}
 
-#ifndef USER_MACRO_FUNCTION 
-#define USER_MACRO_FUNCTION   0 
-#define DEFAULT_USER_MACRO_FUNCTION   1 
-void process_user_macros(uint32_t macroid);
-#else  
-#define DEFAULT_USER_MACRO_FUNCTION   0
-#endif
+void Flash::writedata()
+{
+    if( file.open(FILENAME, FILE_O_WRITE) )
+    {
+      file.write((char*) &data, sizeof(data));
+      file.close();
+      saved = true;
+    }else
+    {
+     // Serial.println("Failed!");
+    }
+}
 
-
-#endif /* FIRMWARE_H */
+void Flash::commit()
+{
+  if (!saved)
+  {
+    writedata();
+  }
+}

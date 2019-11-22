@@ -36,16 +36,16 @@
 #define TXPIN   6
 #define RXPIN   8
 
-#define PINCOUNT1 20
-#define PINCOUNT2 20
-#define PINCOUNT3 21
+#define PINCOUNT1 21
+#define PINCOUNT2 21
+#define PINCOUNT3 22
 
 BLEDis bledis;
 BLEHidAdafruit blehid;
 
-int pinlist1 [PINCOUNT1] ={ D3, D2, D1, D0, D4, C6, D7, E6, B4, B5, F4, F5, F6, F7, B1, B3, B2, B6, TXPIN, RXPIN};
-int pinlist2 [PINCOUNT2] ={ D3, F4, D2, F5, D1, F6, D0, F7, D4, B1, C6, B3, D7, B2, E6, B6, B4, B5, TXPIN, RXPIN};
-int pinlist3 [PINCOUNT3] ={ D3, F4, D2, F5, D1, F6, D0, F7, D4, B1, C6, B3, D7, B2, E6, B6, B4, B6, B5, TXPIN, RXPIN};
+int pinlist1 [PINCOUNT1] ={ 18, D3, D2, D1, D0, D4, C6, D7, E6, B4, B5, F4, F5, F6, F7, B1, B3, B2, B6, TXPIN, RXPIN};
+int pinlist2 [PINCOUNT2] ={ 18, D3, F4, D2, F5, D1, F6, D0, F7, D4, B1, C6, B3, D7, B2, E6, B6, B4, B5, TXPIN, RXPIN};
+int pinlist3 [PINCOUNT3] ={ 18, D3, F4, D2, F5, D1, F6, D0, F7, D4, B1, C6, B3, D7, B2, E6, B6, B4, B6, B5, TXPIN, RXPIN};
 
 void setup() 
 {

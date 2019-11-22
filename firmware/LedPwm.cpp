@@ -29,7 +29,7 @@ uint16_t pwmstepsize = 128;
 uint16_t pwmmaxvalue = DEFAULT_PWM_MAX_VALUE;
 bool breathingincreasing = true;
 
-int PWMMode = 2;
+uint8_t PWMMode = 2;
 
 /**************************************************************************************************************************/
 void setPWMMode(int mode)

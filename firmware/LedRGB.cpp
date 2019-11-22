@@ -21,64 +21,37 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #if WS2812B_LED_ON == 1  //setup RGB module
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel();
-uint8_t RGBval = 150;
-rgb_color colors[WS2812B_LED_COUNT];
 
-// Converts a color from HSV to RGB.
-// h is hue, as a number between 0 and 360.
-// s is the saturation, as a number between 0 and 255.
-// v is the value, as a number between 0 and 255.
-// what is HSV and how does it compare to RGB?: https://www.kirupa.com/design/little_about_color_hsv_rgb.htm
-rgb_color hsvToRgb(uint16_t h, uint8_t s, uint8_t v)
-{
-    uint8_t f = (h % 60) * 255 / 60;
-    uint8_t p = (255 - s) * (uint16_t)v / 255;
-    uint8_t q = (255 - f * (uint16_t)s / 255) * (uint16_t)v / 255;
-    uint8_t t = (255 - (255 - f) * (uint16_t)s / 255) * (uint16_t)v / 255;
-    uint8_t r = 0, g = 0, b = 0;
-    switch((h / 60) % 6){
-        case 0: r = v; g = t; b = p; break;
-        case 1: r = q; g = v; b = p; break;
-        case 2: r = p; g = v; b = t; break;
-        case 3: r = p; g = q; b = v; break;
-        case 4: r = t; g = p; b = v; break;
-        case 5: r = v; g = p; b = q; break;
-    }
-    return rgb_color(r, g, b);
-}
+
+uint16_t hue = DEFAULT_RGB_HUE;  // 0 to 65536
+uint8_t sat = DEFAULT_RGB_SAT; // 0 to 255
+uint8_t val = DEFAULT_RGB_VAL; // 0 to 255
+uint8_t rgbmode = DEFAULT_RGB_MODE;
+uint32_t rgbcolor ;
+
+uint32_t colors[WS2812B_LED_COUNT];
+
 
 
 void setupRGB(void)
 {
    pixels.begin(); // INITIALIZE NeoPixel strip object (REQUIRED)
-pixels.setPin(WS2812B_LED_PIN);
-pixels.updateLength(WS2812B_LED_COUNT);
+   pixels.setPin(WS2812B_LED_PIN);
+   pixels.updateLength(WS2812B_LED_COUNT);
 }
 
-void updateRGB(int mode, unsigned long timesincelastkeypress)
+void updateRGB( unsigned long timesincelastkeypress)
 {
- uint16_t time = millis() >> 2;
-if (timesincelastkeypress<PWM_TOUCH_INTERVAL)
-{
-    RGBval = 255;
 
-}else
-{
- // if (RGBval  > 1) {RGBval -- ;} else {RGBval  = 0 ;}
- if (timesincelastkeypress/10>255)
- {
-     RGBval = 0;
- }
- else
- {
-     RGBval = 255 - timesincelastkeypress/1;
- }
- 
- 
-}
+hue = hue + DEFAULT_RGB_HUE_MAX/1024;
+if (hue > DEFAULT_RGB_HUE_MAX){hue=0;}
+
+ hue = (uint16_t) millis() >> 2;
+
+
 pixels.clear();
 
-switch (mode)
+switch (rgbmode)
 {
 case 0:                         // OFF
     
@@ -89,9 +62,9 @@ case 0:                         // OFF
 case 1:                         // RAINBOW
     
     for(uint16_t i=0; i<WS2812B_LED_COUNT; i++) { // For each pixel...
-        byte x = (time >> 2) - (i << 3);
-        colors[i] = hsvToRgb((uint32_t)x * 359 / 256, 255, RGBval);
-        pixels.setPixelColor(i, colors[i].red, colors[i].green, colors[i].blue); 
+        
+      rgbcolor = pixels.ColorHSV(hue, sat, val);
+      pixels.setPixelColor(i,rgbcolor);
     }
     break;
 default:

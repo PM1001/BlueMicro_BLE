@@ -33,6 +33,9 @@ uint32_t loop_counter_pwm = DEFAULT_LOOP_COUNTER_PWM;
 uint32_t loop_counter_rgb = DEFAULT_LOOP_COUNTER_RGB;
 uint32_t loop_counter_battery = DEFAULT_LOOP_COUNTER_BATTERY;
 uint32_t loop_counter_commands = DEFAULT_LOOP_COUNTER_COMMANDS;
+uint32_t loop_counter_save_to_flash = DEFAULT_LOOP_COUNTER_SAVE2FLASH;
+
+Flash persisteddata;
 
 /**************************************************************************************************************************/
 // put your setup code here, to run once:
@@ -43,17 +46,10 @@ void setup() {
     Serial.begin(115200);
     while ( !Serial ) delay(10);   // for nrf52840 with native usb
   #endif
-
+  
   LOG_LV1("BLEMIC","Starting %s" ,DEVICE_NAME);
-
+  persisteddata.begin();
   setupGpio();                                                                // checks that NFC functions on GPIOs are disabled.
-
- // Scheduler.startLoop(monitoringloop);                                        // Starting second loop task for monitoring tasks
-
-  //keyscantimer.begin(HIDREPORTINGINTERVAL*2, keyscantimer_callback);
-  //monitoringtimer.begin(HIDREPORTINGINTERVAL*20, monitoringtimer_callback);
-  //batterytimer.begin(30*1000, batterytimer_callback);
-  //RGBtimer.begin(WS2812B_LED_COUNT*25, RGBtimer_callback);
   setupBluetooth();
 
   #if BACKLIGHT_PWM_ON == 1 //setup PWM module
@@ -61,16 +57,11 @@ void setup() {
   #endif
   #if WS2812B_LED_ON == 1 //setup PWM module
     setupRGB();
-  #endif+
+  #endif
   // Set up keyboard matrix and start advertising
   setupKeymap();
   setupMatrix();
   startAdv(); 
-  //keyscantimer.start();
-  //monitoringtimer.start();
-  //batterytimer.start();
-  //RGBtimer.start();
-  //suspendLoop(); // this commands suspends the main loop.  We are no longer using the loop but scheduling things using the timers.
 };
 /**************************************************************************************************************************/
 //
@@ -109,7 +100,6 @@ void scanMatrix() {
           pinMode(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
           #endif
     }
-      //delay(1);   // using the FreeRTOS delay function reduced power consumption from 1.5mA down to 0.9mA
       // need for the GPIO lines to settle down electrically before reading.
       #ifdef NRFX_H__  // Added to support BSP 0.9.0
          nrfx_coredep_delay_us(DEFAULT_SETTLING_DELAY);
@@ -118,6 +108,7 @@ void scanMatrix() {
       #endif
 
       pindata = NRF_GPIO->IN;                                         // read all pins at once
+                                                                      // TODO read 840 gpios.
      for (int i = 0; i < MATRIX_COLS; ++i) {
       KeyScanner::scanMatrix((pindata>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing
       pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
@@ -158,12 +149,12 @@ void sendKeyPresses() {
 /**************************************************************************************************************************/
 void loop() {
 
-    keyscantimer_callback(); // call every time...
+    keyscan(); // call every time...
 
     if (loop_counter_commands == 0)
     {
       loop_counter_commands = DEFAULT_LOOP_COUNTER_COMMANDS;
-      monitoringtimer_callback(); // call every DEFAULT_LOOP_COUNTER_COMMANDS
+      processmenu(); // call every DEFAULT_LOOP_COUNTER_COMMANDS
     }
     else
     {
@@ -183,23 +174,32 @@ void loop() {
                   {
                     loop_counter_rgb = DEFAULT_LOOP_COUNTER_RGB;
                     #if WS2812B_LED_ON == 1  
-                    updateRGB(1, timesincelastkeypress);
+                    updateRGB(timesincelastkeypress);
                     #endif// call every DEFAULT_LOOP_COUNTER_RGB
                   }
                   else
                   {
                     loop_counter_rgb--;
-                        if (loop_counter_battery == 0)
+                        if (loop_counter_save_to_flash == 0)
                         {
-                          loop_counter_battery = DEFAULT_LOOP_COUNTER_BATTERY;
-                          #if BLE_LIPO_MONITORING == 1
-                            updateBattery();
-                          #endif// call every DEFAULT_LOOP_COUNTER_BATTERY
+                            loop_counter_save_to_flash = DEFAULT_LOOP_COUNTER_SAVE2FLASH;
+                            persisteddata.commit();
                         }
-                        else
-                        {
-                          loop_counter_battery--;  
-                        }
+                            else
+                            {
+                              loop_counter_save_to_flash--;
+                                if (loop_counter_battery == 0)
+                                {
+                                  loop_counter_battery = DEFAULT_LOOP_COUNTER_BATTERY;
+                                  #if BLE_LIPO_MONITORING == 1
+                                    updateBattery();
+                                  #endif// call every DEFAULT_LOOP_COUNTER_BATTERY
+                                }
+                                else
+                                {
+                                  loop_counter_battery--;  
+                                }
+                            }       
                   }
         }
     }
@@ -213,7 +213,7 @@ void loop() {
 /**************************************************************************************************************************/
 // put your key scanning code here, to run repeatedly:
 /**************************************************************************************************************************/
-void keyscantimer_callback() {
+void keyscan() {
     #if MATRIX_SCAN == 1
     scanMatrix();
   #endif
@@ -235,9 +235,8 @@ void keyscantimer_callback() {
 }
 
 
-void monitoringtimer_callback()
+void processmenu()
 {
-
   switch(run_command_page_bluemicro)
   {
     // CORE BLUEMICRO FUNCTIONS
@@ -261,7 +260,7 @@ void monitoringtimer_callback()
       InternalFS.format();  // using formatting instead of clearbonds due to the potential issue with corrupted file system and the keybord being stuck not being able to pair and save bonds.
     break;
     // USB/BLE FUNCTIONS - OUT_AUTO - OUT_USB - OUT_BT
-
+#if BACKLIGHT_PWM_ON == 1
     // BACKLIGHT FUNCTIONS
     case BL_TOGG:
       stepPWMMode();
@@ -296,6 +295,8 @@ void monitoringtimer_callback()
         decPWMStepSize();
       break;
 
+#endif
+#if WS2812B_LED_ON == 1
     // RGB FUNCTIONS
     case RGB_TOG:
       
@@ -357,6 +358,7 @@ void monitoringtimer_callback()
     case RGB_SPD:
       
     break;
+#endif
     default:
        process_user_macros(run_command_page_bluemicro); // call macros
     break;        

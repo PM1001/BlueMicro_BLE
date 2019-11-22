@@ -48,7 +48,6 @@ void setupKeymap() {
         KC_LCTL,KC_LGUI,KC_LALT,KC_SPC, LAYER_1,LAYER_2,LAYER_2, KC_RALT, KC_APP,KC_RCTL,LAYER_1,KC_LEFT,KC_DOWN,KC_ENTER,KC_RIGHT);
 
 
-
     /*
      * add the other layers
      */

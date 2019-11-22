@@ -146,6 +146,27 @@ This makes it simpler to migrate from the Arduino Pro Micro to the BlueMicro.
         #define B3      14  //miso
         #define B2      13  //mosi
         #define B6      11
+    #elif HARDWARE_MAPPING == BLUEMICROV2_1A
+        #define BLE_LIPO_MONITORING 1
+        #define D3      18  // NOTE on board serial
+        #define D2      7   // NOTE on board serial
+        #define D1      25  //sda
+        #define D0      26  //scl
+        #define D4      27
+        #define C6      28
+        #define D7      29
+        #define E6      30
+        #define B4      15
+        #define B5      16
+
+        #define F4      5
+        #define F5      4
+        #define F6      3
+        #define F7      2
+        #define B1      12  //sck
+        #define B3      14  //miso
+        #define B2      13  //mosi
+        #define B6      11
     #elif HARDWARE_MAPPING == BLUENANO1_0
         #define BLE_LIPO_MONITORING 0
         #define D3      5  //

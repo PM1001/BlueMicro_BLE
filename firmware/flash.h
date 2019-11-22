@@ -1,5 +1,5 @@
 /*
-Copyright 2018 <Pierre Constantineau>
+Copyright 2019 <Pierre Constantineau>
 
 3-Clause BSD License
 
@@ -17,44 +17,39 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-#ifndef FIRMWARE_H
-#define FIRMWARE_H
+#ifndef FLASH_H
+#define FLASH_H
+#include "firmware.h"
 #include <bluefruit.h>
 #include <Adafruit_LittleFS.h>
 #include <InternalFileSystem.h>
-#undef min
-#undef max
-#include "bluetooth_config.h"
-#include "firmware_config.h"
-#include "hardware_variants.h"
-#include "keyboard_config.h"
-#include "avr_mapping.h"
-#include "KeyScanner.h"
-#include "flash.h"
-#include "sleep.h"
-#include "bluetooth.h"
-#include "battery.h"
-#include "LedPwm.h"
-#include "LedRGB.h"
-#include "gpio.h"
-#include "keymap.h"
 
-void setupMatrix(void);
-void scanMatrix(void);
-void sendKeyPresses(void);
+#define FILENAME    "/BlueMicro"
+#define CONTENTS    "Adafruit Little File System test file contents"
 
+struct bluemicrodata {
+    int8_t blepower;
+    uint8_t pwmmode;
+    uint16_t pwmstepsize;
+    uint16_t pwmmaxvalue;
+    uint8_t rgbmode;
+    uint16_t rgbhue;
+    uint8_t rgbsat;
+    uint8_t rgbval;
+};
 
-void keyscan();
-void processmenu();
+class Flash
+{
+    public:
+        Flash();       //constructor
+        void begin();
+        void commit();
+    private:
+        void initialize();
+        void readdata();
+        void writedata();
+        bluemicrodata data;
+        bool saved;
+};
 
-
-#ifndef USER_MACRO_FUNCTION 
-#define USER_MACRO_FUNCTION   0 
-#define DEFAULT_USER_MACRO_FUNCTION   1 
-void process_user_macros(uint32_t macroid);
-#else  
-#define DEFAULT_USER_MACRO_FUNCTION   0
 #endif
-
-
-#endif /* FIRMWARE_H */

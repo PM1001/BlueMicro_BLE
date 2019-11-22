@@ -31,16 +31,11 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 // This is because the arduino IDE can't really work with folders properly
 // if one renames the "libraries" folder to "src", then it tries to compile all the examples and link everything.  Something we don't want to do (and ultimately fails)
 
-  typedef struct rgb_color
-  {
-    unsigned char red, green, blue;
-    rgb_color() {};
-    rgb_color(uint8_t r, uint8_t g, uint8_t b) : red(r), green(g), blue(b) {};
-  } rgb_color;
+
 
 extern Adafruit_NeoPixel pixels;
 void setupRGB(void);
-void updateRGB(int mode, unsigned long timesincelastkeypress);
+void updateRGB(unsigned long timesincelastkeypress);
 void suspendRGB(void);
 
 #endif
