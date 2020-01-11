@@ -109,8 +109,8 @@ void scanMatrix() {
       #endif
 
       #ifdef NRF52840_XXAA
-        pindata0 = P0->IN;                                         // read all pins at once
-        pindata1 = P1->IN;                                         // read all pins at once
+        pindata0 = NRF_P0->IN;                                         // read all pins at once
+        pindata1 = NRF_P1->IN;                                         // read all pins at once
         for (int i = 0; i < MATRIX_COLS; ++i) {
           if (columns[i]<32) 
           {
