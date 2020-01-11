@@ -22,8 +22,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 // ToDo: consider interrupts or GPIOTE
 // ToDo: there must be a better way to debounce
 // ToDo: consider multiple boards and the merging of multiple buffers/modifiers and layer requests.
-// ToDo: Action Keycodes - Bluetooth commands
-// ToDo: Action Keycodes - Reset/DFU commands
+
 
 KeyScanner::KeyScanner() {    // Constructor
     ;

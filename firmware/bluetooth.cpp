@@ -72,7 +72,7 @@ void setupBluetooth(void)
   #endif
   
 #if BLE_PERIPHERAL == 1
-uint8_t Linkdata[8] = {0,0,0,0,0,0,0,0};
+uint8_t Linkdata[8] = {0,0,0,0,0,0,0,0};  //todo switch to 32 bits
   // Configure Keyboard Link Service
   KBLinkService.begin();
   
@@ -391,7 +391,7 @@ void sendlayer(uint8_t layer)
 void sendKeys()
 {
     #if BLE_HID == 1  
-        uint8_t keycode[6] = {0,0,0,0,0,0};
+        uint8_t keycode[6] = {0,0,0,0,0,0}; // todo switch to 32 bits
         uint16_t usagecode = 0;
 
         uint8_t index = 0;

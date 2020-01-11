@@ -27,6 +27,8 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define FILENAME    "/BlueMicro"
 #define CONTENTS    "Adafruit Little File System test file contents"
 
+//todo get things saved...
+
 struct bluemicrodata {
     int8_t blepower;
     uint8_t pwmmode;

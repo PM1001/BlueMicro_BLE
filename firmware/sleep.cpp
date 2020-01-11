@@ -23,7 +23,6 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 /**************************************************************************************************************************/
 // Change Pin Mode - including Sense
 // ToDo: Move to adafruit library?
-// TODO nrf52840 support
 /**************************************************************************************************************************/
 void pinModeSense( uint32_t ulPin, uint32_t ulMode )
 {

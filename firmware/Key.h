@@ -33,7 +33,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define KEY_H
 
 using ActArray = std::array<std::array<uint32_t, 5>, 2>;
-using DurArray = std::array<std::array<uint8_t, 5>, 2>;
+using DurArray = std::array<std::array<uint8_t, 5>, 2>;  //todo do we need to switch to 32 bits?
 
 class Key {
     public:

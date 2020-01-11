@@ -25,7 +25,7 @@ Key::Key(uint32_t activation)
 
 uint32_t page = ((activation & 0xFF00FFFF) >> 24); 
 
-switch (page)
+switch (page)  // todo test the different types of activation
 {
     case PAGE_MEDIA:
         activations[0][_MT_TAP] = (activation & 0xFF00FFFF); 
