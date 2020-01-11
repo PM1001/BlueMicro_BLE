@@ -83,7 +83,8 @@ void setupMatrix(void) {
 // Keyboard Scanning
 /**************************************************************************************************************************/
 void scanMatrix() {
-  uint32_t pindata = 0;
+  uint32_t pindata0 = 0;
+  uint32_t pindata1 = 0;
   for(int j = 0; j < MATRIX_ROWS; ++j) {                             
     //set the current row as OUPUT and LOW
     pinMode(rows[j], OUTPUT);
@@ -107,12 +108,26 @@ void scanMatrix() {
         nrf_delay_us(DEFAULT_SETTLING_DELAY);
       #endif
 
-      pindata = NRF_GPIO->IN;                                         // read all pins at once
-                                                                      // TODO read 840 gpios.
-     for (int i = 0; i < MATRIX_COLS; ++i) {
-      KeyScanner::scanMatrix((pindata>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing
-      pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
-     }
+      #ifdef NRF52840_XXAA
+        pindata0 = P0->IN;                                         // read all pins at once
+        pindata1 = P1->IN;                                         // read all pins at once
+        for (int i = 0; i < MATRIX_COLS; ++i) {
+          if (columns[i]<32) 
+          {
+            KeyScanner::scanMatrix((pindata0>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing 
+          } else
+          {
+            KeyScanner::scanMatrix((pindata1>>(columns[i]-32))&1, millis(), j, i);    // This function processes the logic values and does the debouncing TODO: need to check on this 32 offset
+          }
+          pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
+        }        
+      #else
+        pindata0 = NRF_GPIO->IN;                                         // read all pins at once
+        for (int i = 0; i < MATRIX_COLS; ++i) {
+          KeyScanner::scanMatrix((pindata0>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing
+          pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
+        }
+      #endif
     pinMode(rows[j], INPUT);                                          //'disables' the row that was just scanned
    }                                                                  // done scanning the matrix
 };
