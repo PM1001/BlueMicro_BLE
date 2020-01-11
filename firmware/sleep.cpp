@@ -23,6 +23,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 /**************************************************************************************************************************/
 // Change Pin Mode - including Sense
 // ToDo: Move to adafruit library?
+// TODO nrf52840 support
 /**************************************************************************************************************************/
 void pinModeSense( uint32_t ulPin, uint32_t ulMode )
 {
@@ -32,14 +33,14 @@ void pinModeSense( uint32_t ulPin, uint32_t ulMode )
 
   ulPin = g_ADigitalPinMap[ulPin];
 
-  //NRF_GPIO_Type * port = nrf_gpio_pin_port_decode(&ulPin);
+  NRF_GPIO_Type * port = nrf_gpio_pin_port_decode(&ulPin);
 
   // Set pin mode according to chapter '22.6.3 I/O Pin Configuration'
   switch ( ulMode )
   {
     case INPUT:
       // Set pin to input mode
-      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+      port->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
@@ -48,7 +49,7 @@ void pinModeSense( uint32_t ulPin, uint32_t ulMode )
 
     case INPUT_PULLUP:
       // Set pin to input mode with pull-up resistor enabled
-      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+      port->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup      << GPIO_PIN_CNF_PULL_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
@@ -57,7 +58,7 @@ void pinModeSense( uint32_t ulPin, uint32_t ulMode )
 
     case INPUT_PULLDOWN:
       // Set pin to input mode with pull-down resistor enabled
-      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+      port->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_PULL_Pulldown    << GPIO_PIN_CNF_PULL_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
@@ -66,7 +67,7 @@ void pinModeSense( uint32_t ulPin, uint32_t ulMode )
 
     case OUTPUT:
       // Set pin to output mode
-      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Output       << GPIO_PIN_CNF_DIR_Pos)
+      port->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Output       << GPIO_PIN_CNF_DIR_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
                            | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)

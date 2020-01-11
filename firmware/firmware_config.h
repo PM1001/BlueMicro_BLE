@@ -96,11 +96,6 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define BLE_PERIPHERAL 0
 #endif /* KEYBOARD_MODE */
 
-//#ifndef BOOT_MODE_COMMANDS
-//#define BOOT_MODE_COMMANDS {{KC_SPACE, STATE_MONITOR_MODE},{ KC_B,  STATE_BOOT_CLEAR_BONDS },{ KC_F, STATE_BOOT_SERIAL_DFU},{ KC_W, STATE_BOOT_WIRELESS_DFU}}
-//#define BOOT_MODE_COMMANDS_COUNT 4
-//#endif
-
 #ifndef CONNECT_LED_ACTIVE 
 #define CONNECT_LED_ACTIVE  true
 #endif
@@ -119,6 +114,11 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define BLE_LIPO_MONITORING 0
 #endif
 
+// RGB definitions.
+#ifndef WS2812B_LED_ON
+#define WS2812B_LED_ON  0     
+#endif
+
 #ifndef DEFAULT_RGB_MODE
 #define DEFAULT_RGB_MODE  1     
 #endif
@@ -131,7 +131,6 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define DEFAULT_RGB_HUE_MAX   65536     
 #endif
 
-
 #ifndef DEFAULT_RGB_SAT 
 #define DEFAULT_RGB_SAT  255   // 0 = grey, 255 = full color
 #endif
@@ -140,6 +139,18 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define DEFAULT_RGB_VAL  32   // brightness
 #endif
 
+// PWM Backlight definitions.
+#ifndef BACKLIGHT_PWM_ON 
+#define BACKLIGHT_PWM_ON 0                // PWM Default = off
+#endif
+
+#ifndef DEFAULT_PWM_MAX_VALUE 
+#define DEFAULT_PWM_MAX_VALUE 0x7FFF      // PWM max intensity
+#endif
+
+#ifndef DEFAULT_PWM_VALUE 
+#define DEFAULT_PWM_VALUE 0x7FFF          // PWM default intensity
+#endif
 
 #ifndef DEFAULT_LOOP_COUNTER_COMMANDS 
 #define DEFAULT_LOOP_COUNTER_COMMANDS  2     
@@ -161,8 +172,6 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define DEFAULT_LOOP_COUNTER_BATTERY  30     
 #endif
 
-
-
 #ifndef DEFAULT_SETTLING_DELAY 
 #define DEFAULT_SETTLING_DELAY 1         // uS delay to have the lines settle. (see scanMatrix() in firmware_main.cpp)
 #endif
@@ -171,15 +180,8 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define SLEEPING_DELAY_CONNECTED 600000   // 2 minutes is way too fast and really ennoying. making it 10 minutes
 #define SLEEP_ACTIVE 1                    // 1 = it will go to sleep. 0 = sleep will not be activated.
 
-#ifndef DEFAULT_PWM_MAX_VALUE 
-#define DEFAULT_PWM_MAX_VALUE 0x7FFF      // PWM max intensity
-#endif
-
-#ifndef DEFAULT_PWM_VALUE 
-#define DEFAULT_PWM_VALUE 0x7FFF          // PWM default intensity
-#endif
-
 #define PWM_TOUCH_INTERVAL 1000           // detection time since last keypress.
+
 
 #define VBAT_PIN          (A7)
 #define VBAT_MV_PER_LSB   (0.73242188F)   // 3.0V ADC range and 12-bit ADC resolution = 3000mV/4096

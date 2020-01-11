@@ -112,7 +112,7 @@ void scanMatrix() {
         pindata0 = NRF_P0->IN;                                         // read all pins at once
         pindata1 = NRF_P1->IN;                                         // read all pins at once
         for (int i = 0; i < MATRIX_COLS; ++i) {
-          if (columns[i]<32) 
+          if (columns[i]<32) //TODO: need to check on this 32 offset
           {
             KeyScanner::scanMatrix((pindata0>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing 
           } else
