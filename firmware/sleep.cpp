@@ -18,7 +18,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 */
 #include "sleep.h"
-#include "wiring_digital_gpio.h"
+#include "wiring_gpio.h"
 #include "LedRGB.h"
 #include "LedPWM.h"
 /**************************************************************************************************************************/
@@ -27,9 +27,9 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 /**************************************************************************************************************************/
 void pinModeSenseGPIO( uint32_t ulPin, uint32_t ulMode )
 {
-  if (ulPin >= PINS_COUNT) {
-    return;
-  }
+ // if (ulPin >= PINS_COUNT) {
+ //   return;
+ // }
 
  // ulPin = g_ADigitalPinMap[ulPin];
 

@@ -22,7 +22,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #include <bluefruit.h>
 #include <Adafruit_LittleFS.h>
 #include <InternalFileSystem.h>
-#include "wiring_digital_gpio.h"
+#include "wiring_gpio.h"
 #undef min
 #undef max
 #include "bluetooth_config.h"

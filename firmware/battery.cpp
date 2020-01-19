@@ -29,7 +29,7 @@ int readVBAT(void) {
   analogReference(AR_INTERNAL_3_0); // Set the analog reference to 3.0V (default = 3.6V)
   analogReadResolution(12);         // Set the resolution to 12-bit (0..4095) // Can be 8, 10, 12 or 14
   delay(1);                         // Let the ADC settle  OK since we are calling this from the long term monitoring loop
-  raw = analogRead(VBAT_PIN);       // Get the raw 12-bit, 0..3000mV ADC value
+  raw = analogReadGPIO(VBAT_PIN);       // Get the raw 12-bit, 0..3000mV ADC value
   analogReference(AR_DEFAULT);      // Set the ADC back to the default settings - just in case we use it somewhere else
   analogReadResolution(10);         // Set the ADC back to the default settings - just in case we use it somewhere else
   return raw;

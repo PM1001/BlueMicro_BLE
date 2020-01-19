@@ -16,14 +16,23 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _WIRING_DIGITAL_GPIO_
-#define _WIRING_DIGITAL_GPIO_
+#ifndef _WIRING_GPIO_
+#define _WIRING_GPIO_
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
 // #include "WVariant.h"
+
+/*
+ * \brief Reads the value from the specified analog pin.
+ *
+ * \param ulPin
+ *
+ * \return Read value from selected pin, if no error.
+ */
+uint32_t analogReadGPIO( uint32_t ulPin ) ;
 
 /**
  * \brief Configures the specified pin to behave either as an input or an output. See the description of digital pins for details.
