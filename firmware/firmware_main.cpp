@@ -70,13 +70,13 @@ void setupMatrix(void) {
     //inits all the columns as INPUT
    for (const auto& column : columns) {
       LOG_LV2("BLEMIC","Setting to INPUT Column: %i" ,column);
-      pinMode(column, INPUT);
+      pinModeGPIO(column, INPUT);
     }
 
    //inits all the rows as INPUT_PULLUP
    for (const auto& row : rows) {
       LOG_LV2("BLEMIC","Setting to INPUT_PULLUP Row: %i" ,row);
-      pinMode(row, INPUT_PULLUP);
+      pinModeGPIO(row, INPUT_PULLUP);
     }
 };
 /**************************************************************************************************************************/
@@ -87,18 +87,18 @@ void scanMatrix() {
   uint32_t pindata1 = 0;
   for(int j = 0; j < MATRIX_ROWS; ++j) {                             
     //set the current row as OUPUT and LOW
-    pinMode(rows[j], OUTPUT);
+    pinModeGPIO(rows[j], OUTPUT);
     #if DIODE_DIRECTION == COL2ROW                                         
-    digitalWrite(rows[j], LOW);                                       // 'enables' a specific row to be "low" 
+    digitalWriteGPIO(rows[j], LOW);                                       // 'enables' a specific row to be "low" 
     #else
-    digitalWrite(rows[j], HIGH);                                       // 'enables' a specific row to be "HIGH"
+    digitalWriteGPIO(rows[j], HIGH);                                       // 'enables' a specific row to be "HIGH"
     #endif
     //loops thru all of the columns
     for (int i = 0; i < MATRIX_COLS; ++i) {
           #if DIODE_DIRECTION == COL2ROW                                         
-          pinMode(columns[i], INPUT_PULLUP);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed 
+          pinModeGPIO(columns[i], INPUT_PULLUP);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed 
           #else
-          pinMode(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
+          pinModeGPIO(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
           #endif
     }
       // need for the GPIO lines to settle down electrically before reading.
@@ -119,16 +119,16 @@ void scanMatrix() {
           {
             KeyScanner::scanMatrix((pindata1>>(columns[i]-32))&1, millis(), j, i);    // This function processes the logic values and does the debouncing TODO: need to check on this 32 offset
           }
-          pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
+          pinModeGPIO(columns[i], INPUT);                                     //'disables' the column that just got looped thru
         }        
       #else
         pindata0 = NRF_GPIO->IN;                                         // read all pins at once
         for (int i = 0; i < MATRIX_COLS; ++i) {
           KeyScanner::scanMatrix((pindata0>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing
-          pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
+          pinModeGPIO(columns[i], INPUT);                                     //'disables' the column that just got looped thru
         }
       #endif
-    pinMode(rows[j], INPUT);                                          //'disables' the row that was just scanned
+    pinModeGPIO(rows[j], INPUT);                                          //'disables' the row that was just scanned
    }                                                                  // done scanning the matrix
 };
 /**************************************************************************************************************************/

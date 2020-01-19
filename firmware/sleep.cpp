@@ -18,19 +18,20 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 */
 #include "sleep.h"
+#include "wiring_digital_gpio.h"
 #include "LedRGB.h"
 #include "LedPWM.h"
 /**************************************************************************************************************************/
 // Change Pin Mode - including Sense
 // ToDo: Move to adafruit library?
 /**************************************************************************************************************************/
-void pinModeSense( uint32_t ulPin, uint32_t ulMode )
+void pinModeSenseGPIO( uint32_t ulPin, uint32_t ulMode )
 {
   if (ulPin >= PINS_COUNT) {
     return;
   }
 
-  ulPin = g_ADigitalPinMap[ulPin];
+ // ulPin = g_ADigitalPinMap[ulPin];
 
   NRF_GPIO_Type * port = nrf_gpio_pin_port_decode(&ulPin);
 
@@ -85,19 +86,19 @@ void setupWakeUp() {
   uint32_t pindata = 0;
   for(int j = 0; j < MATRIX_ROWS; ++j) {                             
     //set the current row as OUPUT and LOW
-    pinMode(rows[j], OUTPUT);
+    pinModeGPIO(rows[j], OUTPUT);
     #if DIODE_DIRECTION == COL2ROW                                         
-    digitalWrite(rows[j], LOW);                                       // 'enables' a specific row to be "low" 
+    digitalWriteGPIO(rows[j], LOW);                                       // 'enables' a specific row to be "low" 
     #else
-    digitalWrite(rows[j], HIGH);                                       // 'enables' a specific row to be "HIGH"
+    digitalWriteGPIO(rows[j], HIGH);                                       // 'enables' a specific row to be "HIGH"
     #endif
   }
   //loops thru all of the columns
   for (int i = 0; i < MATRIX_COLS; ++i) {
       #if DIODE_DIRECTION == COL2ROW                                         
-        pinModeSense(columns[i], INPUT_PULLUP);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed 
+        pinModeSenseGPIO(columns[i], INPUT_PULLUP);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed 
       #else
-        pinModeSense(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
+        pinModeSenseGPIO(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
       #endif
   }
 }
