@@ -101,11 +101,11 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #endif
 
 #ifndef DEBOUNCETIME 
-#define DEBOUNCETIME 10
+#define DEBOUNCETIME 5
 #endif
 
 #ifndef HIDREPORTINGINTERVAL
-#define HIDREPORTINGINTERVAL 2
+#define HIDREPORTINGINTERVAL 1
 #endif
 
 // Battery Service definitions.
@@ -116,7 +116,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 // RGB definitions.
 #ifndef WS2812B_LED_ON
-#define WS2812B_LED_ON  0     
+#define WS2812B_LED_ON  0     // RGB Default = off
 #endif
 
 #ifndef DEFAULT_RGB_MODE
@@ -183,7 +183,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define PWM_TOUCH_INTERVAL 1000           // detection time since last keypress.
 
 
-#define VBAT_PIN          (A7)
+#define VBAT_PIN          (31)
 #define VBAT_MV_PER_LSB   (0.73242188F)   // 3.0V ADC range and 12-bit ADC resolution = 3000mV/4096
 #define VBAT_DIVIDER      (0.71275837F)   // 2M + 0.806M voltage divider on VBAT = (2M / (0.806M + 2M))
 #define VBAT_DIVIDER_COMP (1.403F)        // Compensation factor for the VBAT divider
