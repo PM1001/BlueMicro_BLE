@@ -116,7 +116,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 
 // RGB definitions.
 #ifndef WS2812B_LED_ON
-#define WS2812B_LED_ON  0     // RGB Default = off
+#define WS2812B_LED_ON  0     // RGB Default = off.
 #endif
 
 #ifndef DEFAULT_RGB_MODE
