@@ -31,7 +31,7 @@ void pinModeSenseGPIO( uint32_t ulPin, uint32_t ulMode )
  //   return;
  // }
 
- // ulPin = g_ADigitalPinMap[ulPin];
+  ulPin = g_ADigitalPinMap[ulPin];
 
   NRF_GPIO_Type * port = nrf_gpio_pin_port_decode(&ulPin);
 

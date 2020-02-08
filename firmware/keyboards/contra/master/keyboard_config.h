@@ -19,6 +19,7 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 */
 #ifndef KEYBOARD_CONFIG_H
 #define KEYBOARD_CONFIG_H
+#define HARDWARE_MAPPING BLUEMICROV2_1A
 #include "avr_mapping.h"
 
 #define KEYBOARD_SIDE MASTER
@@ -31,15 +32,14 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define DEVICE_MODEL                        "4x12_V1"                          /**< Name of device. Will be included in the advertising data. */
 
 #define MANUFACTURER_NAME                   "keyboards.jpconstantineau.com"            /**< Manufacturer. Will be passed to Device Information Service. */
-
-
+#define DEVICE_POWER 4
 /* HARDWARE DEFINITION*/
 /* key matrix size */
 #define MATRIX_ROWS 4
 #define MATRIX_COLS 12
 
 #define MATRIX_ROW_PINS {F6, B3, B2, B6}
-#define MATRIX_COL_PINS {F4, F5, B5, B4, E6, D7, C6, D4, D0, D1, 8, 6} // d2 d3  BlueMicrov2.0c: d2 = 8, d3=6
+#define MATRIX_COL_PINS {F4, F5, B5, B4, E6, D7, C6, D4, D0, D1, D2, D3} 
 #define UNUSED_PINS {}
 
 /* COL2ROW or ROW2COL */

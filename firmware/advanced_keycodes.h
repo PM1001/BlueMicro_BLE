@@ -33,8 +33,8 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define MOD_RALT (64 << 8)
 #define MOD_RGUI (128 << 8)
 
-#define TG(KC) ((1 << 16) | KC)
-#define OS(KC) ((2 << 16) | KC)
+#define TG(KC) ((1 << 16) | KC)    // Toggle
+#define OS(KC) ((2 << 16) | KC)    // One Shot
 
 #define S(KC) MOD(MOD_LSHIFT, KC)
 

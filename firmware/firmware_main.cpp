@@ -48,6 +48,7 @@ void setup() {
   #endif
   
   LOG_LV1("BLEMIC","Starting %s" ,DEVICE_NAME);
+  dbgMemInfo();
   persisteddata.begin();
   setupGpio();                                                                // checks that NFC functions on GPIOs are disabled.
   setupBluetooth();
@@ -87,18 +88,20 @@ void scanMatrix() {
   uint32_t pindata1 = 0;
   for(int j = 0; j < MATRIX_ROWS; ++j) {                             
     //set the current row as OUPUT and LOW
-    pinModeGPIO(rows[j], OUTPUT);
+   // int ulPinRow = g_ADigitalPinMap[rows[j]];
+    pinMode(rows[j], OUTPUT);
     #if DIODE_DIRECTION == COL2ROW                                         
-    digitalWriteGPIO(rows[j], LOW);                                       // 'enables' a specific row to be "low" 
+    digitalWrite(rows[j], LOW);                                       // 'enables' a specific row to be "low" 
     #else
-    digitalWriteGPIO(rows[j], HIGH);                                       // 'enables' a specific row to be "HIGH"
+    digitalWrite(rows[j], HIGH);                                       // 'enables' a specific row to be "HIGH"
     #endif
     //loops thru all of the columns
     for (int i = 0; i < MATRIX_COLS; ++i) {
+     
           #if DIODE_DIRECTION == COL2ROW                                         
-          pinModeGPIO(columns[i], INPUT_PULLUP);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed 
+          pinMode(columns[i], INPUT_PULLUP);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed 
           #else
-          pinModeGPIO(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
+          pinMode(columns[i], INPUT_PULLDOWN);                              // 'enables' the column High Value on the diode; becomes "LOW" when pressed
           #endif
     }
       // need for the GPIO lines to settle down electrically before reading.
@@ -112,23 +115,27 @@ void scanMatrix() {
         pindata0 = NRF_P0->IN;                                         // read all pins at once
         pindata1 = NRF_P1->IN;                                         // read all pins at once
         for (int i = 0; i < MATRIX_COLS; ++i) {
-          if (columns[i]<32) //TODO: need to check on this 32 offset
+
+         int ulPin = g_ADigitalPinMap[columns[i]];
+          if (ulPin<32) //TODO: need to check on this 32 offset
           {
-            KeyScanner::scanMatrix((pindata0>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing 
+            KeyScanner::scanMatrix((pindata0>>(ulPin))&1, millis(), j, i);       // This function processes the logic values and does the debouncing 
           } else
           {
-            KeyScanner::scanMatrix((pindata1>>(columns[i]-32))&1, millis(), j, i);    // This function processes the logic values and does the debouncing TODO: need to check on this 32 offset
+            KeyScanner::scanMatrix((pindata1>>(ulPin-32))&1, millis(), j, i);    // This function processes the logic values and does the debouncing TODO: need to check on this 32 offset
           }
-          pinModeGPIO(columns[i], INPUT);                                     //'disables' the column that just got looped thru
+        //  KeyScanner::scanMatrix((pindata0>>(g_ADigitalPinMap[columns[i]]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing 
+          pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
         }        
       #else
         pindata0 = NRF_GPIO->IN;                                         // read all pins at once
         for (int i = 0; i < MATRIX_COLS; ++i) {
-          KeyScanner::scanMatrix((pindata0>>(columns[i]))&1, millis(), j, i);       // This function processes the logic values and does the debouncing
-          pinModeGPIO(columns[i], INPUT);                                     //'disables' the column that just got looped thru
+          int ulPin = g_ADigitalPinMap[columns[i]];
+          KeyScanner::scanMatrix((pindata0>>(ulPin))&1, millis(), j, i);       // This function processes the logic values and does the debouncing
+          pinMode(columns[i], INPUT);                                     //'disables' the column that just got looped thru
         }
       #endif
-    pinModeGPIO(rows[j], INPUT);                                          //'disables' the row that was just scanned
+    pinMode(rows[j], INPUT);                                          //'disables' the row that was just scanned
    }                                                                  // done scanning the matrix
 };
 /**************************************************************************************************************************/
@@ -199,6 +206,7 @@ void loop() {
                         {
                             loop_counter_save_to_flash = DEFAULT_LOOP_COUNTER_SAVE2FLASH;
                             persisteddata.commit();
+                            dbgMemInfo();
                         }
                             else
                             {
@@ -397,4 +405,3 @@ void rtos_idle_callback(void) {
     sd_power_mode_set(NRF_POWER_MODE_LOWPWR);
     sd_app_evt_wait();  // puts the nrf52 to sleep when there is nothing to do.  You need this to reduce power consumption. (removing this will increase current to 8mA)
 };
-

@@ -1,5 +1,5 @@
 /*
-Copyright 2019 <Pierre Constantineau>
+Copyright 2018 <Pierre Constantineau>
 
 3-Clause BSD License
 
@@ -17,54 +17,33 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
-
-#ifndef HARDWAREVARIANTS_H
-#define HARDWAREVARIANTS_H
-/*
-The following can be selected from the Tools->Boards Arduino Menu when compiling
-NRF52832_FEATHER
-NRF52840_FEATHER
-NRF52840_ITSYBITSY
-NRF52840_CIRCUITPLAY
-NRF52840_METRO
-NRF52840_PCA10056
-*/
-#ifdef ARDUINO_NRF52832_FEATHER
-  #warning "Compiling for the nrf52832"
-#endif
-#ifdef ARDUINO_NRF52840_FEATHER
-  #error "Compiling for the nrf52840 Feather - not supported"
-#endif
-#ifdef ARDUINO_NRF52840_ITSYBITSY
-  #error "Compiling for the nrf52840 ItsyBitsy - not supported"
-#endif
-#ifdef ARDUINO_NRF52840_CIRCUITPLAY
-  #error "Compiling for the nrf52840 CircuitPlay - not supported"
-#endif
-#ifdef ARDUINO_NRF52840_METRO
-  #error "Compiling for the nrf52840 metro - not supported"
-#endif
-#ifdef ARDUINO_NRF52840_PCA10056
-  #warning "Compiling for the nrf52840"
-#endif
-
-#define FEATHERNRF52832 0
-#define BLUEMICROV1_0   1
-#define BLUEMICROV1_1   2
-#define BLUEMICROV2_0   3
-#define BLUEMICROV2_0B  4
-#define BLUEMICROV2_0C  5
-#define BLUENANO1_0     6
-#define BLUENANO2_0     7
-#define BLUEMICROV2_1A  8
+#include <stdint.h>
+#include "hid_keycodes.h"
+#include "keyboard_config.h"
+#include "advanced_keycodes.h"
+#include "Key.h"
+#include <array>
+#ifndef KEYMAP_H
+#define KEYMAP_H
 
 
-#define COL2ROW       0
-#define ROW2COL       1
+#define KC_CAP_D MOD(MOD_LSHIFT, KC_D)
 
-#define TEST 0
-#define LEFT 1
-#define RIGHT 2
-#define MASTER 3
+#define _QWERTY 0
+#define _L1  1
+#define _L2  2
 
-#endif  /*HARDWAREVARIANTS_H*/
+#define _PRESS 0
+#define _MT_TAP 1
+#define _MT_HOLD 2
+#define _DT_TAP 3
+#define _DT_DOUBLETAP 4
+
+void setupKeymap();
+extern std::array<std::array<Key, MATRIX_COLS>, MATRIX_ROWS> matrix;
+
+
+
+#endif
+
+

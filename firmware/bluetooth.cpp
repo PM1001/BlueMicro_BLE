@@ -456,5 +456,5 @@ void sendRelease()
 }
 void sendString(const char* str)
 {
-    blehid.keySequence(str,10);
+    blehid.keySequence(str,3);
 }

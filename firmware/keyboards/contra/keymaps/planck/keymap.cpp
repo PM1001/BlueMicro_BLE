@@ -60,7 +60,7 @@ void setupKeymap() {
     uint32_t adjust[MATRIX_ROWS][MATRIX_COLS] =
         KEYMAP(
     _______, RESET,   _______,   RGB_TOG, RGB_MOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD,  RGB_VAI, RGB_VAD, KC_DEL ,
-    _______, _______, _______,  _______,   _______,  _______, _______, L_QWERTY,  L_COLEMAK,  L_DVORAK,  _______,  _______,
+    _______, _______, _______,  _______,   _______,  _______, _______, _______,  _______,  _______,  _______,  _______,
     _______, _______,  _______,  _______,   _______,  _______,   _______,  _______, _______, _______, _______, _______,
     _______, _______, _______, _______, L_ADJUST, _______, _______, L_ADJUST, _______,  _______, _______, _______);
 
@@ -78,12 +78,12 @@ void setupKeymap() {
     {
         for (int col = 0; col < MATRIX_COLS; ++col)
         {
-      //      matrix[row][col].addActivation(_COLEMAK, _PRESS, colemak[row][col]);
-      //      matrix[row][col].addActivation(_DVORAK, _PRESS,  dvorak[row][col]);
+          //  matrix[row][col].addActivation(_COLEMAK, _PRESS, colemak[row][col]);
+          //  matrix[row][col].addActivation(_DVORAK, _PRESS,  dvorak[row][col]);
             matrix[row][col].addActivation(_LOWER, _PRESS,   lower[row][col]);
             matrix[row][col].addActivation(_RAISE, _PRESS,   raise[row][col]);
             matrix[row][col].addActivation(_ADJUST, _PRESS,  adjust[row][col]);
-        //    matrix[row][col].addActivation(_MACRO, _PRESS,   macro[row][col]);
+            matrix[row][col].addActivation(_MACRO, _PRESS,   macro[row][col]);
         }
     }
 
@@ -96,53 +96,77 @@ void process_user_macros(uint32_t macroid)
  {
      case HOME_ADD:
      sendString("123 Quiet Crescent");
+     break;
      case WORK_ADD:
      sendString("123 Work Place");
+      break;
      case EMAIL_1:
      sendString("Primary@Email");
+      break;
      case EMAIL_2:
      sendString("Other@Email");
+      break;
      case NAME_1:
      sendString("First Name");
+      break;
      case NAME_2:
      sendString("Middle Name");
+      break;
      case NAME_3:
      sendString("Last Name");
+      break;
      case CBR_FN:
      sendString("{}"); // more to add here
+      break;
      case BRC_FN:
      sendString("[]"); // more to add here
+      break;
      case PRN_FN:
      sendString("()"); // more to add here 
+      break;
      case TAB_DOWN_RTRN:
      sendString("%in%"); // different here
+      break;
      case TAB_UP_RTRN:
      sendString("%in%"); // different here
+      break;
      case PHONE_1:
      sendString("234-567-8901");
+      break;
      case PHONE_2:
      sendString("987-654-3210");
+      break;
      case INOWORD:
      sendString("(i.e., )");  // more to add here
+      break;
      case FOREXMPL:
      sendString("(e.g., )"); // more to add here
+      break;
      case FF_TEXT:
      sendString("rff"); // more to add here
+      break;
      case IN_R:
      sendString("%in%");
+      break;
      case LARW_L:
      sendString("<-");
+      break;
      case LARW_R:
      sendString("->");
+      break;
      break;
      case IPADDR:
      sendString("192.168.1.");
+      break;
      break;
      case SMILE:
      sendString(":)");
+      break;
      break;
      case IPSUM:
      sendString("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
      break;
  }
 }
+
+

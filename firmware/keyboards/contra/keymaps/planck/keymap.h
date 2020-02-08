@@ -29,13 +29,13 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #define KC_CAP_D MOD(MOD_LSHIFT, KC_D)
 
 #define  _QWERTY 0
-#define  _COLEMAK 1
-#define  _DVORAK 2
-#define  _LOWER 3
-#define  _RAISE 4
+#define  _COLEMAK 0
+#define  _DVORAK 0
+#define  _LOWER 1
+#define  _RAISE 2
 //  _PLOVER, // no plover since it needs NKRO and BLE only supports 6KRO
-#define _ADJUST 5
-#define _MACRO 6
+#define _ADJUST 3
+#define _MACRO 4
 
 #define L_QWERTY   TG(LAYER_0 + _QWERTY)
 #define L_COLEMAK  TG(LAYER_0 + _COLEMAK)
