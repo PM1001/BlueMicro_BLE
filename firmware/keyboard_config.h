@@ -1,5 +1,5 @@
 /*
-Copyright 2018 <Pierre Constantineau>
+Copyright 2019 <Pierre Constantineau>
 
 3-Clause BSD License
 
@@ -19,49 +19,68 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 */
 #ifndef KEYBOARD_CONFIG_H
 #define KEYBOARD_CONFIG_H
-//#include "hardware_variants.h"
-//#define HARDWARE_MAPPING  BLUEMICROV2_1A
-//#include "avr_mapping.h"
+#define HARDWARE_MAPPING  BLUEMICROV2_0C
+#include "avr_mapping.h"
 
 #define KEYBOARD_SIDE MASTER
+//#define KEYBOARD_SIDE RIGHT
+// CHANGE THIS FOR THE KEYBOARD TO MATCH WHAT IS BEING FLASHED. OPTIONS: LEFT  RIGHT  MASTER
 
+#define DEVICE_NAME_R                         "SemaphoreBLE_R"                          /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME_L                        "SemaphoreBLE_L"                          /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_NAME_M                         "SemaphoreBLE"                          /**< Name of device. Will be included in the advertising data. */
 
-#define DEVICE_NAME_R                         "4x12_R"                         /**< Name of device. Will be included in the advertising data. */
-#define DEVICE_NAME_L                         "4x12_L"                         /**< Name of device. Will be included in the advertising data. */
-#define DEVICE_NAME_M                         "4x12"                           /**< Name of device. Will be included in the advertising data. */
+#define DEVICE_MODEL                        "SemaphoreBLE_V1"                          /**< Name of device. Will be included in the advertising data. */
 
-#define DEVICE_MODEL                        "4x12_V1"                          /**< Name of device. Will be included in the advertising data. */
+#define MANUFACTURER_NAME                   "JPConstantineau.com"                      /**< Manufacturer. Will be passed to Device Information Service. */
 
-#define MANUFACTURER_NAME                   "keyboards.jpconstantineau.com"            /**< Manufacturer. Will be passed to Device Information Service. */
-
+#define BLE_LIPO_MONITORING 1
 /* HARDWARE DEFINITION*/
 /* key matrix size */
-#define MATRIX_ROWS 4
-#define MATRIX_COLS 12
+#define MATRIX_ROWS 5
+#define MATRIX_COLS 6
 
-//#define MATRIX_ROW_PINS {F6, B3, B2, B6}
-//#define MATRIX_COL_PINS {F4, F5, B5, B4, E6, D7, C6, D4, D0, D1, D2, D3} 
-
-#define MATRIX_ROW_PINS {3, 14, 13, 11}
-#define MATRIX_COL_PINS {5, 4, 16, 15, 30, 29, 28, 27, 26, 25, 7, 18} 
-//#define BLE_LIPO_MONITORING 1
+#define MATRIX_ROW_PINS {B2, B6, D4, C6, D7 }
+#define MATRIX_COL_PINS {F4, F5, F6, F7, B1, B3 }
 #define UNUSED_PINS {}
 
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
 
+#define PERIPHERAL_COUNT 1 // more than 1 doesn't work yet... 
+
+
+#if KEYBOARD_SIDE == RIGHT
 #define KEYMAP( \
-	 K00,   K01,   K02,   K03,  K04,   K05,   K06,   K07,  K08,   K09,   K010,   K011,     \
-	 K10,   K11,   K12,   K13,  K14,   K15,   K16,   K17,  K18,   K19,   K110,   K111,    \
-	 K20,   K21,   K22,   K23,  K24,   K25,   K26,   K27,  K28,   K29,   K210,   K211,   \
-	 K30,   K31,   K32,   K33,  K34,   K35,   K36,   K37,  K38,   K39,   K310,   K311 \
-) { \
-	{ K00,   K01,   K02,   K03, K04,   K05,   K06,   K07,  K08,   K09,   K010,   K011,  }, \
-	{ K10,   K11,   K12,   K13, K14,   K15,   K16,   K17,  K18,   K19,   K110,   K111,  }, \
-	{ K20,   K21,   K22,   K23, K24,   K25,   K26,   K27,  K28,   K29,   K210,   K211,  }, \
-	{ K30,   K31,   K32,   K33, K34,   K35,   K36,   K37,  K38,   K39,   K310,   K311  } \
+      k00, k01, k02, k03, k04, k05,  \
+      k10, k11, k12, k13, k14, k15,  \
+      k20, k21, k22, k23, k24, k25,  \
+      k30, k31, k32, k33, k34, k35,  \
+      k40, k41, k42, k43, k44, k45  \
+) \
+{ \
+    { k00, k01, k02, k03, k04, k05 }, \
+    { k10, k11, k12, k13, k14, k15 }, \
+    { k20, k21, k22, k23, k24, k25 }, \
+    { k30, k31, k32, k33, k34, k35 }, \
+    { k40, k41, k42, k43, k44, k45 } \
 }
+#else
+#define KEYMAP( \
+      k00, k01, k02, k03, k04, k05,  \
+      k10, k11, k12, k13, k14, k15,  \
+      k20, k21, k22, k23, k24, k25,  \
+      k30, k31, k32, k33, k34, k35,  \
+      k40, k41, k42, k43, k44, k45  \
+) \
+{ \
+    { k00, k01, k02, k03, k04, k05 }, \
+    { k10, k11, k12, k13, k14, k15 }, \
+    { k20, k21, k22, k23, k24, k25 }, \
+    { k30, k31, k32, k33, k34, k35 }, \
+    { k40, k41, k42, k43, k44, k45 } \
+} 
 
-
+#endif
 
 #endif /* KEYBOARD_CONFIG_H */

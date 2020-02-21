@@ -1,5 +1,5 @@
 /*
-Copyright 2018 <Pierre Constantineau, Julian Komaromy>
+Copyright 2018-2020 <Pierre Constantineau, Julian Komaromy>
 
 3-Clause BSD License
 
@@ -32,39 +32,58 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 #ifndef KEYSCANNER_H
 #define KEYSCANNER_H
 
+     //  #ifndef USER_LAYERS_FUNCTION 
+      //  #define USER_LAYERS_FUNCTION   0 
+        #define DEFAULT_USER_LAYERS_FUNCTION   1 
+uint8_t process_user_layers(std::vector<uint8_t> &buffer);
+    //   #else  
+     //   #define DEFAULT_USER_LAYERS_FUNCTION   0
+    //    #endif
+
+
 class KeyScanner {
     public:
         KeyScanner();
  
         static bool scanMatrix(const int& currentState,unsigned long millis, const int& row, const int& col);
-        static void updateRemoteReport(uint8_t data0 , uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6);
-        static void updateRemoteLayer(uint8_t data0);
+        //static void updateRemoteReport(uint8_t data0 , uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6);
+        static void updateRemoteReport(uint8_t data0, uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6, uint8_t data7, uint8_t data8, uint8_t data9,uint8_t data10,uint8_t data11, uint8_t data12, uint8_t data13,uint8_t data14);
+        static void updateRemoteLayer(uint8_t data0, uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6, uint8_t data7, uint8_t data8, uint8_t data9,uint8_t data10,uint8_t data11, uint8_t data12, uint8_t data13,uint8_t data14);
+        //static void updateRemoteLayer(uint8_t data0);
         static bool getReport();
         static unsigned long getLastPressed();
         static bool layerChanged;
         static bool reportChanged;
         static uint8_t localLayer;
-        static uint8_t layerMode;
-        static uint8_t currentReport[8];
+        //static uint8_t layerMode;
+        static uint8_t previouslayer;
+        static uint8_t currentReport[16];
+      //  static uint8_t currentLayer[16];
+
+ static std::vector<uint8_t> locallayerBuffer;
 
     private:
         static void resetReport();
-        static void updateBuffer(uint8_t layer);
+        static void updateBuffer();
         static bool updateLayer();
         static bool updateModifiers();
         static void copyRemoteReport();
         static void resetRemoteReport();
-        
-        static uint8_t remoteReport[8];
-        static uint8_t previousReport[8];
+        static void resetLayer();
+
+        static uint8_t remoteReport[16];
+        static uint8_t previousReport[16];
         static unsigned long timestamps[MATRIX_ROWS][MATRIX_COLS]; 
         static unsigned long lastPressed;
-
-        static uint8_t remoteLayer;
+       // static uint8_t remoteLayer[16];
+        
         static uint8_t currentMod;
         static uint8_t remoteMod;
         static uint8_t bufferposition;
+        static std::vector<uint16_t> keycodeBuffer ;
+        static std::vector<uint8_t> layerBuffer ;
 
+        static std::vector<uint8_t> remotelayerBuffer ;
         static std::vector<uint16_t> activeKeys; 
         static std::vector<uint16_t> macroBuffer; 
         static std::vector<uint16_t> toggleBuffer; 

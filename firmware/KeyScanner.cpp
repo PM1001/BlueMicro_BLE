@@ -1,5 +1,5 @@
 /*
-Copyright 2018 <Pierre Constantineau, Julian Komaromy>
+Copyright 2018-2020 <Pierre Constantineau, Julian Komaromy>
 
 3-Clause BSD License
 
@@ -24,6 +24,24 @@ LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR P
 // ToDo: consider multiple boards and the merging of multiple buffers/modifiers and layer requests.
 // ToDo: Action Keycodes - Bluetooth commands
 // ToDo: Action Keycodes - Reset/DFU commands
+
+//https://forum.arduino.cc/index.php?topic=319795.0
+namespace std {
+  void __throw_length_error(char const*) {
+  }
+}
+
+#if DEFAULT_USER_LAYERS_FUNCTION ==  1 
+    uint8_t process_user_layers(std::vector<uint8_t> &buffer)
+    {
+        uint8_t layer = 0;
+        for (auto entry : buffer) 
+        {
+            if (layer<entry){layer=entry;}
+        }
+        return layer;
+    }
+#endif
 
 KeyScanner::KeyScanner() {    // Constructor
     ;
@@ -71,15 +89,30 @@ bool KeyScanner::scanMatrix(const int& currentState,unsigned long currentMillis,
 /**************************************************************************************************************************/
 // Called by callback function when remote data is received
 /**************************************************************************************************************************/
-void KeyScanner::updateRemoteLayer(uint8_t data)
+void KeyScanner::updateRemoteLayer(uint8_t data0, uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6,uint8_t data7, uint8_t data8, uint8_t data9,uint8_t data10,uint8_t data11, uint8_t data12, uint8_t data13,uint8_t data14)
 {
-    remoteLayer = data;
+remotelayerBuffer.clear();
+if (data0>0) {remotelayerBuffer.push_back(data0);}
+if (data1>0) {remotelayerBuffer.push_back(data1);}
+if (data2>0) {remotelayerBuffer.push_back(data2);}
+if (data3>0) {remotelayerBuffer.push_back(data3);}
+if (data4>0) {remotelayerBuffer.push_back(data4);}
+if (data5>0) {remotelayerBuffer.push_back(data5);}
+if (data6>0) {remotelayerBuffer.push_back(data6);}
+if (data7>0) {remotelayerBuffer.push_back(data7);}
+if (data8>0) {remotelayerBuffer.push_back(data8);}
+if (data9>0) {remotelayerBuffer.push_back(data9);}
+if (data10>0) {remotelayerBuffer.push_back(data10);}
+if (data11>0) {remotelayerBuffer.push_back(data11);}
+if (data12>0) {remotelayerBuffer.push_back(data12);}
+if (data13>0) {remotelayerBuffer.push_back(data13);}
+if (data14>0) {remotelayerBuffer.push_back(data14);}
 }
 
 /**************************************************************************************************************************/
 // Called by callback function when remote data is received
 /**************************************************************************************************************************/
-void KeyScanner::updateRemoteReport(uint8_t data0, uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6)
+void KeyScanner::updateRemoteReport(uint8_t data0, uint8_t data1, uint8_t data2,uint8_t data3, uint8_t data4, uint8_t data5,uint8_t data6,uint8_t data7, uint8_t data8, uint8_t data9,uint8_t data10,uint8_t data11, uint8_t data12, uint8_t data13,uint8_t data14)
 {
     remoteMod=data0;
     remoteReport[0]= data0;
@@ -89,6 +122,14 @@ void KeyScanner::updateRemoteReport(uint8_t data0, uint8_t data1, uint8_t data2,
     remoteReport[4]= data4;
     remoteReport[5]= data5;
     remoteReport[6]= data6;
+    remoteReport[7]= data7;
+    remoteReport[8]= data8;
+    remoteReport[9]= data9;
+    remoteReport[10]= data10;
+    remoteReport[11]= data11;
+    remoteReport[12]= data12;
+    remoteReport[13]= data13;
+    remoteReport[14]= data14;
 }
 
 
@@ -102,6 +143,14 @@ void KeyScanner::resetRemoteReport()
     remoteReport[4]= 0;
     remoteReport[5]= 0;
     remoteReport[6]= 0;
+    remoteReport[7]= 0;
+    remoteReport[8]= 0;
+    remoteReport[9]= 0;
+    remoteReport[10]= 0;
+    remoteReport[11]= 0;
+    remoteReport[12]= 0;
+    remoteReport[13]= 0;
+    remoteReport[14]= 0;
 }
 
 
@@ -116,6 +165,35 @@ void KeyScanner::resetReport() {
     currentReport[4] = 0;
     currentReport[5] = 0;
     currentReport[6] = 0;
+    currentReport[7] = 0;
+    currentReport[8] = 0;
+    currentReport[9] = 0;
+    currentReport[10] = 0;
+    currentReport[11] = 0;
+    currentReport[12] = 0;
+    currentReport[13] = 0;
+    currentReport[14] = 0;
+}
+/**************************************************************************************************************************/
+void KeyScanner::resetLayer() {
+
+ /*   currentLayer[0] = 0;
+    currentLayer[1] = 0;
+    currentLayer[2] = 0;
+    currentLayer[3] = 0;
+    currentLayer[4] = 0;
+    currentLayer[5] = 0;
+    currentLayer[6] = 0;
+    currentLayer[7] = 0;
+    currentLayer[8] = 0;
+    currentLayer[9] = 0;
+    currentLayer[10] = 0;
+    currentLayer[11] = 0;
+    currentLayer[12] = 0;
+    currentLayer[13] = 0;
+    currentLayer[14] = 0;*/
+
+
 }
 
 
@@ -134,24 +212,43 @@ void KeyScanner::copyRemoteReport()
     if (remoteReport[4]>0){currentReport[bufferposition] = remoteReport[4]; bufferposition++; }
     if (remoteReport[5]>0){currentReport[bufferposition] = remoteReport[5]; bufferposition++; }
     if (remoteReport[6]>0){currentReport[bufferposition] = remoteReport[6]; bufferposition++; }
+    if (remoteReport[7]>0){currentReport[bufferposition] = remoteReport[7]; bufferposition++; }
+    if (remoteReport[8]>0){currentReport[bufferposition] = remoteReport[8]; bufferposition++; }
+    if (remoteReport[9]>0){currentReport[bufferposition] = remoteReport[9]; bufferposition++; }
+    if (remoteReport[10]>0){currentReport[bufferposition] = remoteReport[10]; bufferposition++; }
+    if (remoteReport[11]>0){currentReport[bufferposition] = remoteReport[11]; bufferposition++; }
+    if (remoteReport[12]>0){currentReport[bufferposition] = remoteReport[12]; bufferposition++; }
+    if (remoteReport[13]>0){currentReport[bufferposition] = remoteReport[13]; bufferposition++; }
+    if (remoteReport[14]>0){currentReport[bufferposition] = remoteReport[14]; bufferposition++; }
 #endif
 }
-
 /*
  * loop through the entire matrix, checking for 
  * activated keys and adding the activated ones
  * into a buffer
  */
-void KeyScanner::updateBuffer(uint8_t layer)
+void KeyScanner::updateBuffer()
 {
+
+    localLayer = process_user_layers(layerBuffer);
     activeKeys.clear();
     bool emptyOneshot = false;
 
     for(int row = 0; row < MATRIX_ROWS; ++row) {
         for (auto& key : matrix[row]) 
         {
-            //pair of activation/duration
-            auto activation = key.getPair(layer);
+          //pair of activation/duration   first is keycode, second is duration.
+            auto activation = key.getPair(localLayer);
+
+
+            if (activation.first >= LAYER_0 && activation.first <= LAYER_F)
+            { 
+                layerBuffer.push_back(activation.first - 0xF0);
+                locallayerBuffer.push_back(activation.first - 0xF0);
+                localLayer = process_user_layers(layerBuffer);
+                
+            }
+
 
             if (activation.first != 0) 
             {
@@ -213,44 +310,25 @@ void KeyScanner::updateBuffer(uint8_t layer)
     }
 }
 
+
+
 /**************************************************************************************************************************/
 // Scan for layer changes - must do this first.
 /**************************************************************************************************************************/
 bool KeyScanner::updateLayer()
 {
     uint8_t prevlayer = localLayer;     // remember last layer
-
-    // Select the layer which the selection is done on
-    // this isthe larger of local and remote layers
-    uint8_t selectionLayer = localLayer; 
-
-    if (localLayer < remoteLayer)
+ 
+    layerBuffer.clear();
+    locallayerBuffer.clear();
+    for (auto remotelayer : remotelayerBuffer)
     {
-        selectionLayer = remoteLayer;
+        layerBuffer.push_back(remotelayer);
     }
-
+    
     // read through the matrix and select all of the 
     // currently pressed keys 
-    updateBuffer(selectionLayer);
-
-    /* 
-     * iterate through all of the currently pressed keys, if 
-     * a layer key is pressed, change the layer accordingly
-     * if no other layers are set in the buffer, the default
-     * layer should be chosen
-     */
-    localLayer = LAYER_0 - 0xF0;
-    for (auto keycode : activeKeys)
-    {
-        // the first byte is the actual HID keycode of the key
-        uint8_t keyValue = static_cast<uint8_t>(keycode & 0x00FF);
-
-        if (keyValue >= LAYER_0 && keyValue <= LAYER_F)
-        {
-            // calculate layer offset
-            localLayer = keyValue - 0xF0;
-        }
-    }
+    updateBuffer();// function that updates the activeKeys and layers
 
     layerChanged = (prevlayer != localLayer);
     return layerChanged;
@@ -282,7 +360,7 @@ bool KeyScanner::updateModifiers()
             case KC_RGUI:   currentMod |= 128; changed = true; break;
         }
 
-        //add all of the extra modifiers into the curren modifier 
+        //add all of the extra modifiers into the current modifier 
         currentMod |= extraModifiers;
     }
 
@@ -297,38 +375,48 @@ bool KeyScanner::getReport()
     resetReport();
     copyRemoteReport();
     updateLayer();
+    //localLayer = 0;
     updateModifiers();
 
     for (auto keycode : activeKeys) 
     {
         auto hidKeycode = static_cast<uint8_t>(keycode & 0x00FF);
 
-        if (hidKeycode >= KC_A && hidKeycode <= KC_EXSEL)
+        if (hidKeycode >= KC_A && hidKeycode <= KC_EXSEL)  // select only valid keycodes: drop mofifiers
         {
-            currentReport[bufferposition] = hidKeycode;
+            currentReport[ bufferposition] = hidKeycode;
             ++bufferposition;
         }
 
-        if (bufferposition == 7)
+        if (bufferposition == 15)
         {
             bufferposition = 1;
         }
     }
 
     currentReport[0] = currentMod;
-    currentReport[7] = localLayer;
+    currentReport[15] = localLayer;
 
-   if((currentReport[0] != previousReport[0])
+   if(  (currentReport[0] != previousReport[0])
         | (currentReport[1] != previousReport[1])
-         | (currentReport[2] != previousReport[2])
-          | (currentReport[3] != previousReport[3])
-           | (currentReport[4] != previousReport[4])
-            | (currentReport[5] != previousReport[5])
-             | (currentReport[6] != previousReport[6])
-              | (currentReport[7] != previousReport[7]))
-    {reportChanged = false;}
-    else
+        | (currentReport[2] != previousReport[2])
+        | (currentReport[3] != previousReport[3])
+        | (currentReport[4] != previousReport[4])
+        | (currentReport[5] != previousReport[5])
+        | (currentReport[6] != previousReport[6])
+        | (currentReport[7] != previousReport[7])
+        | (currentReport[8] != previousReport[8])
+        | (currentReport[9] != previousReport[9])
+        | (currentReport[10] != previousReport[10])
+        | (currentReport[11] != previousReport[11])
+        | (currentReport[12] != previousReport[12])
+        | (currentReport[13] != previousReport[13])
+        | (currentReport[14] != previousReport[14])
+        | (currentReport[15] != previousReport[15])
+        )
     {reportChanged = true;}
+    else
+    {reportChanged = false;}
 
     previousReport[0] = currentReport[0];
     previousReport[1] = currentReport[1];
@@ -338,6 +426,14 @@ bool KeyScanner::getReport()
     previousReport[5] = currentReport[5];
     previousReport[6] = currentReport[6];
     previousReport[7] = currentReport[7];
+    previousReport[8] = currentReport[8];
+    previousReport[9] = currentReport[9];
+    previousReport[10] = currentReport[10];
+    previousReport[11] = currentReport[11];
+    previousReport[12] = currentReport[12];
+    previousReport[13] = currentReport[13];
+    previousReport[14] = currentReport[14];
+    previousReport[15] = currentReport[15];
 
     return reportChanged;
 }
@@ -349,22 +445,30 @@ unsigned long KeyScanner::getLastPressed()
 /**************************************************************************************************************************/
 
 
-uint8_t KeyScanner::currentReport[8] = {0, 0, 0 ,0, 0, 0, 0, 0}; 
-uint8_t KeyScanner::remoteReport[8]  = {0, 0, 0 ,0, 0, 0, 0, 0}; 
-uint8_t KeyScanner::previousReport[8] = {0, 0, 0 ,0, 0, 0, 0, 0};
+uint8_t KeyScanner::currentReport[16] = {0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0}; 
+uint8_t KeyScanner::remoteReport[16]  = {0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0}; 
+uint8_t KeyScanner::previousReport[16] ={0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0};
 bool    KeyScanner::layerChanged = false;
 bool    KeyScanner::reportChanged = true;
 uint8_t KeyScanner::localLayer = 0;
-uint8_t KeyScanner::remoteLayer = 0;
+//uint8_t KeyScanner::remoteLayer[16] ={0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0};
+//uint8_t KeyScanner::currentLayer[16]={0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0};
+uint8_t KeyScanner::previouslayer = 0;
 uint8_t KeyScanner::remoteMod = 0;
 uint8_t KeyScanner::currentMod = 0;
 unsigned long KeyScanner::timestamps[MATRIX_ROWS][MATRIX_COLS]  = {0};
 unsigned long KeyScanner::lastPressed = 0;
 uint8_t KeyScanner::bufferposition = 0;
-uint8_t KeyScanner::layerMode = 0;
+//uint8_t KeyScanner::layerMode = 0;
+
+std::vector<uint16_t> KeyScanner::keycodeBuffer {};
+std::vector<uint8_t> KeyScanner::layerBuffer {};
+std::vector<uint8_t> KeyScanner::remotelayerBuffer {};
+std::vector<uint8_t> KeyScanner::locallayerBuffer {};
+
+
 std::vector<uint16_t> KeyScanner::activeKeys {};
 std::vector<uint16_t> KeyScanner::macroBuffer {};
 std::vector<uint16_t> KeyScanner::toggleBuffer {};
 std::vector<uint16_t> KeyScanner::leaderBuffer {};
 std::vector<uint16_t> KeyScanner::oneshotBuffer {};
-

@@ -1,5 +1,5 @@
 /*
-Copyright 2018 <Pierre Constantineau>
+Copyright 2018-2020 <Pierre Constantineau>
 
 3-Clause BSD License
 
@@ -34,11 +34,11 @@ void setupBluetooth(void);
 void startAdv(void);
 void set_keyboard_led(uint16_t conn_handle, uint8_t led_bitmap);
 
-void sendKeys(uint8_t currentReport[8]);
-void sendRelease(uint8_t currentReport[8]);
+void sendKeys();
+//void sendRelease(uint8_t currentReport[8]);
 
 #if BLE_PERIPHERAL ==1   | BLE_CENTRAL ==1 
-void sendlayer(uint8_t layer);
+void sendlayer();
 #endif
 
 #if BLE_PERIPHERAL == 1

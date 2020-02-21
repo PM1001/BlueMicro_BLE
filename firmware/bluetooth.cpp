@@ -1,5 +1,5 @@
 /*
-Copyright 2018 <Pierre Constantineau>
+Copyright 2018-2020 <Pierre Constantineau>
 
 3-Clause BSD License
 
@@ -206,12 +206,12 @@ void notify_callback(BLEClientCharacteristic* chr, uint8_t* data, uint16_t len)
   {
      if (chr->uuid == KBLinkClientChar_Layers.uuid){
       LOG_LV1("CB NOT","notify_callback: Layers Data");
-          KeyScanner::updateRemoteLayer(data[0]);  // Layer is only a single uint8
+          KeyScanner::updateRemoteLayer(data[0],data[1],data[2], data[3],data[4], data[5], data[6],data[7],data[8], data[9], data[10],data[11],data[12], data[13], data[14]);  // Layer is only a single uint8
       }
 
     if (chr->uuid == KBLinkClientChar_Buffer.uuid){
       LOG_LV1("CB NOT","notify_callback: Buffer Data");
-          KeyScanner::updateRemoteReport(data[0],data[1],data[2], data[3],data[4], data[5], data[6]);
+          KeyScanner::updateRemoteReport(data[0],data[1],data[2], data[3],data[4], data[5], data[6],data[7],data[8], data[9], data[10],data[11],data[12], data[13], data[14]);
       }
       
   }
@@ -260,7 +260,7 @@ LOG_LV1("CB_CHR","layer_request_callback: len %i offset %i  data %i" ,len, data[
       if (len>0)
       {
         // update state
-        KeyScanner::updateRemoteLayer(data[0]);
+        KeyScanner::updateRemoteLayer(data[0],data[1],data[2], data[3],data[4], data[5], data[6],data[7],data[8], data[9], data[10],data[11],data[12], data[13], data[14]);
       }  
 }
 #endif
@@ -344,8 +344,8 @@ void cent_disconnect_callback(uint16_t conn_handle, uint8_t reason)
   (void) reason;
   LOG_LV1("CENTRL","Disconnected"  );
   // if the half disconnects, we need to make sure that the received buffer is set to empty.
-            KeyScanner::updateRemoteLayer(0);  // Layer is only a single uint8
-           KeyScanner::updateRemoteReport(0,0,0, 0,0, 0, 0);
+           KeyScanner::updateRemoteLayer(0,0,0, 0,0, 0, 0, 0,0, 0, 0, 0,0, 0, 0); 
+           KeyScanner::updateRemoteReport(0,0,0, 0,0, 0, 0, 0,0, 0, 0, 0,0, 0, 0);
 }
 #endif
 
@@ -372,48 +372,62 @@ void set_keyboard_led(uint16_t conn_handle, uint8_t led_bitmap)
   }
 }
 /**************************************************************************************************************************/
-void sendlayer(uint8_t layer)
+void sendlayer()
 {
+     uint8_t copyLayer[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+     int index = 0;
+      for (auto layerdata : KeyScanner::locallayerBuffer)
+      {
+          copyLayer[index]=layerdata;
+          index++;
+      }
+
     // Note that HID standard only has a buffer of 6 keys (plus modifiers)
         #if BLE_PERIPHERAL ==1  
-          KBLinkChar_Layers.notify8(layer);                   // Peripheral->central uses the subscribe/notify mechanism
+          KBLinkChar_Layers.notify(copyLayer,15);//.notify8(layer);                   // Peripheral->central uses the subscribe/notify mechanism
+          
         #endif
         
         #if BLE_CENTRAL ==1
-        LOG_LV1("MXSCAN","Sending Layer %i  %i" ,millis(),layer );
+        LOG_LV1("MXSCAN","Sending Layer %i  %i" ,millis(),copyLayer[0] );
         if (KBLinkClientChar_Layer_Request.discover()) {
-          uint16_t msg = KBLinkClientChar_Layer_Request.write8_resp(layer);       // Central->Peripheral uses the write mechanism
+          //uint16_t msg = KBLinkClientChar_Layer_Request.write8_resp(layer);       // Central->Peripheral uses the write mechanism
+
+          uint16_t msg = KBLinkClientChar_Layer_Request.write_resp(copyLayer,15);
           LOG_LV1("MXSCAN","Sending Layer results  %i" ,msg);
         }
         #endif 
 }
 /**************************************************************************************************************************/
-void sendKeys(uint8_t currentReport[8])
+void sendKeys()
 {
     #if BLE_HID == 1  
-        uint8_t keycode[6];
+        uint8_t keycode[6] = {0,0,0,0,0,0};
         uint8_t layer = 0;
         uint8_t mods = 0;
-        mods = KeyScanner::currentReport[0];                                                 // modifiers
-        keycode[0] = KeyScanner::currentReport[1];                                           // Buffer 
-        keycode[1] = KeyScanner::currentReport[2];                                           // Buffer 
-        keycode[2] = KeyScanner::currentReport[3];                                           // Buffer 
-        keycode[3] = KeyScanner::currentReport[4];                                           // Buffer 
-        keycode[4] = KeyScanner::currentReport[5];                                           // Buffer 
-        keycode[5] = KeyScanner::currentReport[6];                                           // Buffer 
-        layer = KeyScanner::currentReport[7];                                                // Layer
+     //   uint8_t currentReportindex = 1;
+       // uint8_t bufferposition = 0;
+        mods = KeyScanner::currentReport[0];                                             // modifiers
+        
+        keycode[0] = KeyScanner::currentReport[1];
+        keycode[1] = KeyScanner::currentReport[2];
+        keycode[2] = KeyScanner::currentReport[3];
+        keycode[3] = KeyScanner::currentReport[4];
+        keycode[4] = KeyScanner::currentReport[5];
+        keycode[5] = KeyScanner::currentReport[6];
+        layer = KeyScanner::currentReport[15];                                               // Layer
         blehid.keyboardReport(hid_conn_hdl,mods,  keycode); 
         LOG_LV2("HID","Sending blehid.keyboardReport " );
     #endif
     #if BLE_PERIPHERAL ==1  
-        KBLinkChar_Buffer.notify(KeyScanner::currentReport,7);
+        KBLinkChar_Buffer.notify(KeyScanner::currentReport,15); //send everything over, modifiers, layers and keycodes
     #endif
     #if BLE_CENTRAL ==1
          ; // Only send layer to slaves - send nothing here
     #endif 
 }
 /**************************************************************************************************************************/
-void sendRelease(uint8_t currentReport[8])
+/*void sendRelease(uint8_t currentReport[8])
 {
     #if BLE_HID == 1
         blehid.keyRelease(hid_conn_hdl);                                             // HID uses the standard blehid service
@@ -426,4 +440,4 @@ void sendRelease(uint8_t currentReport[8])
           // Only send layer to slaves
           ;                                                              // Central does not need to send the buffer to the Peripheral.
     #endif
-}
+}*/

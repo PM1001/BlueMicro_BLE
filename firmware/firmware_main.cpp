@@ -150,14 +150,14 @@ void scanMatrix() {
 /**************************************************************************************************************************/
 void sendKeyPresses() {
    KeyScanner::getReport();                                            // get state data - Data is in KeyScanner::currentReport  
-   if (!(KeyScanner::reportChanged))  //any new key presses anywhere?
+   if ((KeyScanner::reportChanged))  //any new key presses anywhere?
    {                                                                              
-        sendKeys(KeyScanner::currentReport);
-        isReportedReleased = false;
+        sendKeys();
+      //  isReportedReleased = false;
         LOG_LV1("MXSCAN","SEND: %i %i %i %i %i %i %i %i %i " ,millis(),KeyScanner::currentReport[0], KeyScanner::currentReport[1],KeyScanner::currentReport[2],KeyScanner::currentReport[3], KeyScanner::currentReport[4],KeyScanner::currentReport[5], KeyScanner::currentReport[6],KeyScanner::currentReport[7] );        
     }
- /*  else                                                                  //NO key presses anywhere
-   {
+  // else       {LOG_LV1("MXSCAN","KeyScanner::reportChanged");}                                                           //NO key presses anywhere
+  /* {
     if ((!isReportedReleased)){
       sendRelease(KeyScanner::currentReport);  
       isReportedReleased = true;                                         // Update flag so that we don't re-issue the message if we don't need to.
@@ -167,9 +167,9 @@ void sendKeyPresses() {
   #if BLE_PERIPHERAL ==1   | BLE_CENTRAL ==1                            /**************************************************/
     if(KeyScanner::layerChanged)                                               //layer comms
     {   
-        sendlayer(KeyScanner::localLayer);
+   //temp     sendlayer();
         LOG_LV1("MXSCAN","Layer %i  %i" ,millis(),KeyScanner::localLayer);
-        KeyScanner::layerChanged = false;                                      // mark layer as "not changed" since last update
+        //KeyScanner::layerChanged = false;                                      // mark layer as "not changed" since last update
     } 
   #endif                                                                /**************************************************/
 }
